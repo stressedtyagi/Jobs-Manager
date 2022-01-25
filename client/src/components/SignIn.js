@@ -1,0 +1,147 @@
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
+import Link from "@mui/material/Link";
+import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+import Alert from "@mui/material/Alert";
+import Copyright from "./Copyright";
+import axios from "axios";
+import { useState, useEffect } from "react";
+
+function SignIn() {
+    const [signin, setSignin] = useState(0);
+    const [error, setError] = useState("");
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const email = event.target.elements.email.value;
+        const password = event.target.elements.password.value;
+        const data = await axios
+            .post("/api/v1/auth/login", {
+                email,
+                password,
+            })
+            .catch((error) => {
+                console.dir(error.response.data.msg);
+                console.dir(error.response.status);
+                setError(error.response.data.msg);
+            });
+        const token = data?.data?.token;
+        if (token) {
+            const accessToken = "Bearer " + token;
+            setSignin(1);
+            window.localStorage.setItem("token", token);
+        }
+    };
+
+    useEffect(() => {
+        const token = window.localStorage.getItem("token");
+        if (token) {
+            setSignin(1);
+        }
+    }, [signin]);
+
+    return (
+        <>
+            {signin ? (
+                "Hello"
+            ) : (
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline />
+                    <Box
+                        sx={{
+                            marginTop: 8,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                        }}
+                    >
+                        {error ? (
+                            <Alert
+                                severity="error"
+                                onClose={() => {
+                                    setError("");
+                                }}
+                            >
+                                {error}
+                            </Alert>
+                        ) : (
+                            ""
+                        )}
+                        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+
+                        <Typography component="h1" variant="h5">
+                            Sign In
+                        </Typography>
+                        <Box
+                            component="form"
+                            noValidate
+                            onSubmit={handleSubmit}
+                            sx={{ mt: 3 }}
+                        >
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="email"
+                                        label="Email Address"
+                                        name="email"
+                                        autoComplete="email"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        name="password"
+                                        label="Password"
+                                        type="password"
+                                        id="password"
+                                        autoComplete="new-password"
+                                    />
+                                </Grid>
+                            </Grid>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        value="remember"
+                                        color="primary"
+                                    />
+                                }
+                                label="Remember me"
+                            />
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{ mt: 3, mb: 2 }}
+                            >
+                                Sign In
+                            </Button>
+                            <Grid container justifyContent="flex-end">
+                                <Grid item>
+                                    <Link href="/signup" variant="body2">
+                                        Don't have an account? Sign Up
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                        </Box>
+                    </Box>
+                    <Copyright sx={{ mt: 5 }} />
+                </Container>
+            )}
+        </>
+    );
+}
+
+export default SignIn;
