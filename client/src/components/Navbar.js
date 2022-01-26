@@ -1,17 +1,25 @@
-import { Link } from "react-router-dom";
+import { Button } from "@mui/material";
+import { NavLink } from "react-router-dom";
 
 const myStyle = {
-    display: "flex",
-    justifyContent: "space-around",
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr 1fr 1fr 1fr",
+    justifyItems: "center",
+    gap: "20px",
     fontSize: "30px",
+    fontFamily: "Roboto Mono",
     textDecoration: "none",
 };
 
-const linkStyle = {
-    textDecoration: "none",
-};
+const Navbar = (props) => {
+    const [signedIn, setSignedIn] = props.context;
+    console.log("Navbar: " + signedIn);
 
-const Navbar = () => {
+    const handleLogOut = (event) => {
+        window.localStorage.removeItem("token");
+        setSignedIn(0);
+    };
+
     return (
         <nav
             style={{
@@ -20,18 +28,55 @@ const Navbar = () => {
             }}
         >
             <div style={myStyle}>
-                <Link to="/" style={linkStyle}>
+                <NavLink
+                    to="/"
+                    style={({ isActive }) => ({
+                        color: isActive ? "red" : "",
+                    })}
+                >
                     Home
-                </Link>
-                <Link to="/dashboard" style={linkStyle}>
-                    Dashboard
-                </Link>
-                <Link to="/signup" style={linkStyle}>
-                    Sign Up
-                </Link>
-                <Link to="/signin" style={linkStyle}>
+                </NavLink>
+
+                {signedIn ? (
+                    <NavLink
+                        to="/dashboard"
+                        style={({ isActive }) => ({
+                            color: isActive ? "red" : "",
+                        })}
+                    >
+                        Dashboard
+                    </NavLink>
+                ) : (
+                    <NavLink
+                        to="/signup"
+                        style={({ isActive }) => ({
+                            color: isActive ? "red" : "",
+                        })}
+                    >
+                        Sign Up
+                    </NavLink>
+                )}
+
+                <NavLink
+                    to="/signin"
+                    style={({ isActive }) => ({
+                        color: isActive ? "red" : "",
+                    })}
+                >
                     Sign In
-                </Link>
+                </NavLink>
+
+                {signedIn ? (
+                    <Button
+                        variant="contained"
+                        style={{ justifySelf: "end" }}
+                        onClick={handleLogOut}
+                    >
+                        Logout
+                    </Button>
+                ) : (
+                    ""
+                )}
             </div>
         </nav>
     );

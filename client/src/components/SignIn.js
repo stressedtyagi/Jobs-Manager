@@ -14,10 +14,18 @@ import Alert from "@mui/material/Alert";
 import Copyright from "./Copyright";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import { Navigate, useOutletContext } from "react-router";
 
 function SignIn() {
-    const [signin, setSignin] = useState(0);
+    // Old signin state : locally build
+    // const [signin, setSignin] = useState(0);
     const [error, setError] = useState("");
+    const [signedIn, setSignedIn] = useOutletContext();
+
+    /*
+     * Checking value of signedIn State
+     */
+    // console.log("SignIn : " + signedIn);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -29,29 +37,35 @@ function SignIn() {
                 password,
             })
             .catch((error) => {
-                console.dir(error.response.data.msg);
-                console.dir(error.response.status);
+                /*
+                 *Error Dubug Code
+                 */
+                // console.dir(error.response.data.msg);
+                // console.dir(error.response.status);
                 setError(error.response.data.msg);
             });
+
         const token = data?.data?.token;
         if (token) {
             const accessToken = "Bearer " + token;
-            setSignin(1);
-            window.localStorage.setItem("token", token);
+            // setSignin(1);
+            setSignedIn(1);
+            window.localStorage.setItem("token", accessToken);
         }
     };
 
     useEffect(() => {
         const token = window.localStorage.getItem("token");
         if (token) {
-            setSignin(1);
+            // setSignin(1);
+            setSignedIn(1);
         }
-    }, [signin]);
+    }, [setSignedIn]);
 
     return (
         <>
-            {signin ? (
-                "Hello"
+            {signedIn ? (
+                <Navigate to="/dashboard" />
             ) : (
                 <Container component="main" maxWidth="xs">
                     <CssBaseline />

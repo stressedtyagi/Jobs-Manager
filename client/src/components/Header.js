@@ -1,11 +1,11 @@
-import Navbar from "./Navbar"
+import Navbar from "./Navbar";
 
 const Header = (props) => {
     return (
         <>
-            <Navbar/>
+            <Navbar {...props} />
         </>
     );
-}
+};
 
 export default Header;
