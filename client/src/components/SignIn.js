@@ -21,6 +21,7 @@ import { Navigate, useOutletContext } from "react-router";
 function SignIn() {
     // Old signin state : locally build
     // const [signin, setSignin] = useState(0);
+
     const [error, setError] = useState("");
     const [signedIn, setSignedIn] = useOutletContext();
 
@@ -56,13 +57,17 @@ function SignIn() {
         }
     };
 
-    useEffect(() => {
-        const token = window.localStorage.getItem("token");
-        if (token) {
-            // setSignin(1);
-            setSignedIn(1);
-        }
-    }, [setSignedIn]);
+    /**
+     * NOTE: THIS IS USELESS CODE HERE :) IDK WHY ALSO ...
+     */
+    // useEffect(() => {
+    //     const token = window.localStorage.getItem("token");
+    //     if (token) {
+    //         // setSignin(1);
+    //         console.log("SIGNIN COMP : " + signedIn);
+    //         setSignedIn(1);
+    //     }
+    // });
 
     return (
         <>
