@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { useEffect } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const myStyle = {
     display: "grid",
@@ -13,10 +14,21 @@ const myStyle = {
 
 const Navbar = (props) => {
     const [signedIn, setSignedIn] = props.context;
-    console.log("Navbar: " + signedIn);
+    const navigate = useNavigate();
+
+    /**
+     * Debuging start
+     */
+    useEffect(() => {
+        console.log("NAVBAR : " + signedIn);
+    }, [signedIn]);
+    /**
+     * Debuging end
+     */
 
     const handleLogOut = (event) => {
         window.localStorage.removeItem("token");
+        navigate("");
         setSignedIn(0);
     };
 
@@ -69,7 +81,7 @@ const Navbar = (props) => {
                 {signedIn ? (
                     <Button
                         variant="contained"
-                        style={{ justifySelf: "end" }}
+                        style={{ justifySelf: "end", marginTop: "5px" }}
                         onClick={handleLogOut}
                     >
                         Logout
