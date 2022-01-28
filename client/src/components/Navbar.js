@@ -1,6 +1,11 @@
+// mui imports
 import { Button } from "@mui/material";
-import { useEffect } from "react";
+
+//other imports
 import { NavLink, useNavigate } from "react-router-dom";
+
+// helpers/utils imports
+import { removeLocalStorage } from "../utils/browserActions";
 
 const myStyle = {
     display: "grid",
@@ -16,20 +21,10 @@ const Navbar = (props) => {
     const [signedIn, setSignedIn] = props.context;
     const navigate = useNavigate();
 
-    /**
-     * Debuging start
-     */
-    useEffect(() => {
-        console.log("NAVBAR : " + signedIn);
-    }, [signedIn]);
-    /**
-     * Debuging end
-     */
-
     const handleLogOut = (event) => {
-        window.localStorage.removeItem("token");
-        navigate("");
+        removeLocalStorage("token");
         setSignedIn(0);
+        navigate("");
     };
 
     return (
@@ -50,44 +45,42 @@ const Navbar = (props) => {
                 </NavLink>
 
                 {signedIn ? (
-                    <NavLink
-                        to="/dashboard"
-                        style={({ isActive }) => ({
-                            color: isActive ? "red" : "",
-                        })}
-                    >
-                        Dashboard
-                    </NavLink>
+                    <>
+                        <NavLink
+                            to="/dashboard"
+                            style={({ isActive }) => ({
+                                color: isActive ? "red" : "",
+                            })}
+                        >
+                            Dashboard
+                        </NavLink>
+                        <Button
+                            variant="contained"
+                            style={{ justifySelf: "end", marginTop: "5px" }}
+                            onClick={handleLogOut}
+                        >
+                            Logout
+                        </Button>
+                    </>
                 ) : (
-                    <NavLink
-                        to="/signup"
-                        style={({ isActive }) => ({
-                            color: isActive ? "red" : "",
-                        })}
-                    >
-                        Sign Up
-                    </NavLink>
-                )}
-
-                <NavLink
-                    to="/signin"
-                    style={({ isActive }) => ({
-                        color: isActive ? "red" : "",
-                    })}
-                >
-                    Sign In
-                </NavLink>
-
-                {signedIn ? (
-                    <Button
-                        variant="contained"
-                        style={{ justifySelf: "end", marginTop: "5px" }}
-                        onClick={handleLogOut}
-                    >
-                        Logout
-                    </Button>
-                ) : (
-                    ""
+                    <>
+                        <NavLink
+                            to="/signup"
+                            style={({ isActive }) => ({
+                                color: isActive ? "red" : "",
+                            })}
+                        >
+                            Sign Up
+                        </NavLink>
+                        <NavLink
+                            to="/signin"
+                            style={({ isActive }) => ({
+                                color: isActive ? "red" : "",
+                            })}
+                        >
+                            Sign In
+                        </NavLink>
+                    </>
                 )}
             </div>
         </nav>

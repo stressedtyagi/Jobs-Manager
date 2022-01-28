@@ -1,3 +1,4 @@
+// mui imports
 import {
     Avatar,
     Button,
@@ -13,61 +14,45 @@ import {
     Alert,
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Copyright from "./Copyright";
+
+// other imports
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Navigate, useOutletContext } from "react-router";
 
-function SignIn() {
-    // Old signin state : locally build
-    // const [signin, setSignin] = useState(0);
+// Custom Component imports
+import Copyright from "./Copyright";
 
+// Helper/utils Imports
+import { setLocalStorage } from "../utils/browserActions";
+
+function SignIn() {
     const [error, setError] = useState("");
     const [signedIn, setSignedIn] = useOutletContext();
 
-    /*
-     * Checking value of signedIn State
-     */
-    // console.log("SignIn : " + signedIn);
-
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const email = event.target.elements.email.value;
-        const password = event.target.elements.password.value;
-        const data = await axios
+
+        const formData = new FormData(event.currentTarget);
+        const email = formData.get("email");
+        const password = formData.get("password");
+
+        const response = await axios
             .post("/api/v1/auth/login", {
                 email,
                 password,
             })
             .catch((error) => {
-                /*
-                 *Error Dubug Code
-                 */
-                // console.dir(error.response.data.msg);
-                // console.dir(error.response.status);
                 setError(error.response.data.msg);
             });
 
-        const token = data?.data?.token;
+        const token = response?.data?.token;
         if (token) {
             const accessToken = "Bearer " + token;
-            // setSignin(1);
-            setSignedIn(1);
-            window.localStorage.setItem("token", accessToken);
+            setLocalStorage("token", accessToken);
+            setSignedIn(accessToken);
         }
     };
-
-    /**
-     * NOTE: THIS IS USELESS CODE HERE :) IDK WHY ALSO ...
-     */
-    // useEffect(() => {
-    //     const token = window.localStorage.getItem("token");
-    //     if (token) {
-    //         // setSignin(1);
-    //         console.log("SIGNIN COMP : " + signedIn);
-    //         setSignedIn(1);
-    //     }
-    // });
 
     return (
         <>

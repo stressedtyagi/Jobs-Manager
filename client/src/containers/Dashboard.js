@@ -1,19 +1,28 @@
-import { useState, useEffect } from "react";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import MuiDrawer from "@mui/material/Drawer";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import List from "@mui/material/List";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
+// mui imports
+import {
+    styled,
+    createTheme,
+    ThemeProvider,
+    CssBaseline,
+    MuiDrawer,
+    Box,
+    Toolbar,
+    List,
+    Divider,
+    IconButton,
+    Container,
+    Grid,
+    Paper,
+} from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { mainListItems, secondaryListItems } from "../helpers/listItems";
-import Copyright from "../components/Copyright";
+
+// other imports
+import { useState } from "react";
 import { useOutletContext } from "react-router";
+
+// custom components and helpers import
+import Copyright from "../components/Copyright";
+import { mainListItems, secondaryListItems } from "../helpers/listItems";
 
 const drawerWidth = 240;
 
@@ -48,16 +57,6 @@ const mdTheme = createTheme();
 function DashboardContent() {
     const [open, setOpen] = useState(true);
     const [signedIn] = useOutletContext();
-
-    /**
-     * Debuging start
-     */
-    useEffect(() => {
-        console.log("DASHBOARD : " + signedIn);
-    }, [signedIn]);
-    /**
-     * Debuging end
-     */
 
     const toggleDrawer = () => {
         setOpen(!open);
