@@ -4,7 +4,6 @@ import {
     createTheme,
     ThemeProvider,
     CssBaseline,
-    MuiDrawer,
     Box,
     Toolbar,
     List,
@@ -14,15 +13,20 @@ import {
     Grid,
     Paper,
 } from "@mui/material";
+import MuiDrawer from "@mui/material/Drawer";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 // other imports
-import { useState } from "react";
-import { useOutletContext } from "react-router";
+import { useEffect, useState } from "react";
+import { Navigate, useOutletContext } from "react-router";
 
-// custom components and helpers import
+// custom components import
 import Copyright from "../components/Copyright";
+
+// helpers and utils import
 import { mainListItems, secondaryListItems } from "../helpers/listItems";
+import auth from "../utils/auth";
+import browserActions from "../utils/browserActions";
 
 const drawerWidth = 240;
 
@@ -54,18 +58,46 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
-function DashboardContent() {
+function Dashboard() {
+    const [authenticated, setAuthenticated] = useState(false);
+    const [error, setError] = useState("");
     const [open, setOpen] = useState(true);
-    const [signedIn] = useOutletContext();
+    const [signedIn, setSignedIn] = useOutletContext();
 
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
+    /**
+     * TODO: [signedIn state] : dont let navbar change when dashboard is at loading state,
+     *      currently dashboard and logout btn are appearing in navbar when dashboard is at loading state.
+     */
+    useEffect(() => {
+        const params = { token: signedIn };
+        const data = auth
+            .get("/api/v1/jobs", params)
+            .then((res) => {
+                console.log("data: " + res.data);
+                setAuthenticated(true);
+            })
+            .catch((err) => {
+                const { msg } = err.response.data;
+                console.dir(err.response.data.msg);
+                setError(msg);
+                setSignedIn(0);
+            });
+    });
+
     return (
         <>
             {!signedIn ? (
-                ""
+                <Navigate to="/signin" />
+            ) : !authenticated ? (
+                !error ? (
+                    "LODING...."
+                ) : (
+                    error
+                )
             ) : (
                 <ThemeProvider theme={mdTheme}>
                     <Box sx={{ display: "flex" }}>
@@ -152,6 +184,4 @@ function DashboardContent() {
     );
 }
 
-export default function Dashboard() {
-    return <DashboardContent />;
-}
+export default Dashboard;
