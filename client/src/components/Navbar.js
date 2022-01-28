@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
 
 // helpers/utils imports
-import { removeLocalStorage } from "../utils/browserActions";
+import browserActions from "../utils/browserActions";
 
 const myStyle = {
     display: "grid",
@@ -22,7 +22,7 @@ const Navbar = (props) => {
     const navigate = useNavigate();
 
     const handleLogOut = (event) => {
-        removeLocalStorage("token");
+        browserActions.removeLocalStorage("token");
         setSignedIn(0);
         navigate("");
     };

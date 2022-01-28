@@ -7,7 +7,7 @@ import Footer from "./Footer";
 import Header from "./Header";
 
 // helper/utils import
-import { getLocalStorage } from "../utils/browserActions";
+import browserActions from "../utils/browserActions";
 
 const Skeleton = () => {
     /**
@@ -17,7 +17,7 @@ const Skeleton = () => {
      * TODO: Setting up random token value also let user to login
      */
     const [signedIn, setSignedIn] = useState(
-        () => getLocalStorage("token") || 0
+        () => browserActions.getLocalStorage("token") || 0
     );
 
     return (

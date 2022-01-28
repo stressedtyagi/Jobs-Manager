@@ -24,7 +24,7 @@ import { Navigate, useOutletContext } from "react-router";
 import Copyright from "./Copyright";
 
 // Helper/utils Imports
-import { setLocalStorage } from "../utils/browserActions";
+import browserActions from "../utils/browserActions";
 
 function SignIn() {
     const [error, setError] = useState("");
@@ -49,7 +49,7 @@ function SignIn() {
         const token = response?.data?.token;
         if (token) {
             const accessToken = "Bearer " + token;
-            setLocalStorage("token", accessToken);
+            browserActions.setLocalStorage("token", accessToken);
             setSignedIn(accessToken);
         }
     };

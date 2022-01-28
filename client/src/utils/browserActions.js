@@ -1,19 +1,15 @@
-const getLocalStorage = (key) => {
-    return window.localStorage.getItem(key);
+const browserActions = {
+    getLocalStorage: (key) => {
+        return window.localStorage.getItem(key);
+    },
+    setLocalStorage: (key, data) => {
+        window.localStorage.setItem(key, data);
+        return true;
+    },
+    removeLocalStorage: (key) => {
+        window.localStorage.removeItem(key);
+        return true;
+    },
 };
 
-const setLocalStorage = (key, data) => {
-    window.localStorage.setItem(key, data);
-    return true;
-};
-
-const removeLocalStorage = (key) => {
-    window.localStorage.removeItem(key);
-    return true;
-};
-
-module.exports = {
-    getLocalStorage,
-    setLocalStorage,
-    removeLocalStorage,
-};
+export default browserActions;
