@@ -65,7 +65,28 @@ const login = async (req, res) => {
     res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
 };
 
+const checkAuth = async (req, res) => {
+    /**
+     * Method just to check authenticity of the token provided by client
+     */
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        throw new UnauthenticatedError("Token not provided");
+    }
+
+    const token = authHeader.split(" ")[1];
+
+    try {
+        const payload = jwt.verify(token, process.env.JWT_SECRET);
+        res.status(StatusCodes.OK).json(payload);
+    } catch (err) {
+        throw new UnauthenticatedError("Unauthorized access");
+    }
+};
+
 module.exports = {
     register,
     login,
+    checkAuth,
 };
