@@ -1,5 +1,5 @@
 // mui imports
-import { Button } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 
 //other imports
 import { NavLink, useNavigate } from "react-router-dom";
@@ -18,12 +18,16 @@ const myStyle = {
 };
 
 const Navbar = (props) => {
-    const [signedIn, setSignedIn] = props.context;
+    const [user, login, logout] = props.context;
     const navigate = useNavigate();
 
+    /**
+     * [SETUP] : Put login button rather than link and make drop down form for signin
+     */
     const handleLogOut = (event) => {
-        browserActions.removeLocalStorage("token");
-        setSignedIn(0);
+        event.preventDefault();
+
+        logout();
         navigate("");
     };
 
@@ -44,7 +48,7 @@ const Navbar = (props) => {
                     Home
                 </NavLink>
 
-                {signedIn ? (
+                {user ? (
                     <>
                         <NavLink
                             to="/dashboard"
@@ -54,6 +58,7 @@ const Navbar = (props) => {
                         >
                             Dashboard
                         </NavLink>
+                        <Chip label={`Hello ${user.name}`} variant="outlined" />
                         <Button
                             variant="contained"
                             style={{ justifySelf: "end", marginTop: "5px" }}

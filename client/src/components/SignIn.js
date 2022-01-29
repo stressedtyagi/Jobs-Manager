@@ -28,7 +28,7 @@ import browserActions from "../utils/browserActions";
 
 function SignIn() {
     const [error, setError] = useState("");
-    const [signedIn, setSignedIn] = useOutletContext();
+    const [token, user, login, logout] = useOutletContext();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -47,16 +47,17 @@ function SignIn() {
             });
 
         const token = response?.data?.token;
+
         if (token) {
             const accessToken = "Bearer " + token;
             browserActions.setLocalStorage("token", accessToken);
-            setSignedIn(accessToken);
+            login(accessToken);
         }
     };
 
     return (
         <>
-            {signedIn ? (
+            {user ? (
                 <Navigate to="/dashboard" />
             ) : (
                 <Container component="main" maxWidth="xs">

@@ -12,6 +12,7 @@ import {
     Container,
     Grid,
     Paper,
+    CircularProgress,
 } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -59,45 +60,46 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function Dashboard() {
-    const [authenticated, setAuthenticated] = useState(false);
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(1);
     const [open, setOpen] = useState(true);
-    const [signedIn, setSignedIn] = useOutletContext();
+    const [token, user, login, logout] = useOutletContext();
 
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
-    /**
-     * TODO: [signedIn state] : dont let navbar change when dashboard is at loading state,
-     *      currently dashboard and logout btn are appearing in navbar when dashboard is at loading state.
-     */
     useEffect(() => {
-        const params = { token: signedIn };
-        const data = auth
-            .get("/api/v1/jobs", params)
+        const params = { token: token };
+        auth.get("/api/v1/jobs", params)
             .then((res) => {
-                console.log("data: " + res.data);
-                setAuthenticated(true);
+                setLoading(0);
             })
             .catch((err) => {
                 const { msg } = err.response.data;
-                console.dir(err.response.data.msg);
                 setError(msg);
-                setSignedIn(0);
+                logout();
             });
     });
 
+    /**
+     * [BUG] : By the time Dashboard is rendered `user` state remains null
+     * after render state gets some value
+     * i.e by making call at /dashboard ..... / route is coming even when user is authenticated
+     *          -> [TEMP SOLUTION] : Added Progress Bar until the `token` state is not null
+     *                              i.e UseEffect is still making asyc call to authenticate `user`
+     */
+
     return (
         <>
-            {!signedIn ? (
-                <Navigate to="/signin" />
-            ) : !authenticated ? (
-                !error ? (
-                    "LODING...."
+            {!user ? (
+                !token ? (
+                    <Navigate to="/" />
                 ) : (
-                    error
+                    <CircularProgress color="secondary" />
                 )
+            ) : loading ? (
+                <CircularProgress />
             ) : (
                 <ThemeProvider theme={mdTheme}>
                     <Box sx={{ display: "flex" }}>
