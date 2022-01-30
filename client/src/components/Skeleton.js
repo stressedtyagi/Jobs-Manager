@@ -29,7 +29,6 @@ const Skeleton = () => {
             };
             auth.post("/api/v1/auth", params)
                 .then((res) => {
-                    console.log("REFRESH");
                     const { userId, name } = res.data;
                     setUser({ userId, name });
                 })

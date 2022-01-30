@@ -23,41 +23,12 @@ import { Navigate, useOutletContext } from "react-router";
 
 // custom components import
 import Copyright from "../components/Copyright";
+import Loader from "../components/Loader";
 
 // helpers and utils import
 import { mainListItems, secondaryListItems } from "../helpers/listItems";
 import auth from "../utils/auth";
 import browserActions from "../utils/browserActions";
-
-const drawerWidth = 240;
-
-const Drawer = styled(MuiDrawer, {
-    shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
-    "& .MuiDrawer-paper": {
-        position: "relative",
-        whiteSpace: "nowrap",
-        width: drawerWidth,
-        transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-        boxSizing: "border-box",
-        ...(!open && {
-            overflowX: "hidden",
-            transition: theme.transitions.create("width", {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-            }),
-            width: theme.spacing(7),
-            [theme.breakpoints.up("sm")]: {
-                width: theme.spacing(9),
-            },
-        }),
-    },
-}));
-
-const mdTheme = createTheme();
 
 function Dashboard() {
     const [error, setError] = useState("");
@@ -66,16 +37,11 @@ function Dashboard() {
     const [token, user, login, logout] = useOutletContext();
     const [data, setData] = useState(null);
 
-    const toggleDrawer = () => {
-        setOpen(!open);
-    };
-
     useEffect(() => {
         if (!data) {
             const params = { token: token };
             auth.get("/api/v1/jobs", params)
                 .then(({ data }) => {
-                    console.dir(data);
                     setData(data);
                     setLoading(0);
                 })
@@ -95,105 +61,57 @@ function Dashboard() {
      *                              i.e UseEffect is still making asyc call to authenticate `user`
      */
 
+    /**
+     * [TODO] : Aligning Items to center
+     */
+
     return (
-        <>
+        <Grid
+            container
+            direction="row"
+            style={{
+                border: "solid",
+                minWidth: "100%",
+                height: "100vh",
+            }}
+        >
             {!user ? (
                 !token ? (
                     <Navigate to="/" />
                 ) : (
-                    <CircularProgress color="secondary" />
+                    <Grid item xs={12}>
+                        <Loader color="secondary" />
+                    </Grid>
                 )
             ) : loading ? (
-                <CircularProgress />
+                <Grid item xs={12}>
+                    <Loader color="success" />
+                </Grid>
             ) : (
-                <ThemeProvider theme={mdTheme}>
-                    <Box sx={{ display: "flex" }}>
-                        <CssBaseline />
-                        <Drawer variant="permanent" open={open}>
-                            <Toolbar
-                                sx={{
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "flex-end",
-                                    px: [1],
-                                }}
-                            >
-                                <IconButton onClick={toggleDrawer}>
-                                    <ChevronLeftIcon />
-                                </IconButton>
-                            </Toolbar>
-                            <Divider />
-                            <List>{mainListItems}</List>
-                            <Divider />
-                            <List>{secondaryListItems}</List>
-                        </Drawer>
-                        <Box
-                            component="main"
-                            sx={{
-                                backgroundColor: (theme) =>
-                                    theme.palette.mode === "light"
-                                        ? theme.palette.grey[100]
-                                        : theme.palette.grey[900],
-                                flexGrow: 1,
-                                height: "100vh",
-                                overflow: "auto",
+                <Grid
+                    container
+                    direction="row"
+                    // justifyContent="center"
+                >
+                    <Grid item xs={4} alignSelf="stretch">
+                        <Paper
+                            style={{
+                                width: "inherit",
+                                background: "red",
                             }}
-                        >
-                            <Toolbar />
-                            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                                <Grid container spacing={3}>
-                                    {/* Chart */}
-                                    <Grid item xs={12} md={8} lg={9}>
-                                        <Paper
-                                            sx={{
-                                                p: 2,
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                height: 240,
-                                            }}
-                                        >
-                                            {data.jobs.map((itm) => (
-                                                <li key={itm._id}>
-                                                    {itm.company}
-                                                    {" | "}
-                                                    {itm.position}
-                                                </li>
-                                            ))}
-                                        </Paper>
-                                    </Grid>
-                                    {/* Recent Deposits */}
-                                    <Grid item xs={12} md={4} lg={3}>
-                                        <Paper
-                                            sx={{
-                                                p: 2,
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                height: 240,
-                                            }}
-                                        >
-                                            COMPONENT - 2
-                                        </Paper>
-                                    </Grid>
-                                    {/* Recent Orders */}
-                                    <Grid item xs={12}>
-                                        <Paper
-                                            sx={{
-                                                p: 2,
-                                                display: "flex",
-                                                flexDirection: "column",
-                                            }}
-                                        >
-                                            COMPONENT - 3
-                                        </Paper>
-                                    </Grid>
-                                </Grid>
-                                <Copyright sx={{ pt: 4 }} />
-                            </Container>
-                        </Box>
-                    </Box>
-                </ThemeProvider>
+                        ></Paper>
+                    </Grid>
+                    <Grid item xs={8} alignSelf="stretch">
+                        <Paper
+                            style={{
+                                width: "inherit",
+                                background: "yellow",
+                            }}
+                        ></Paper>
+                    </Grid>
+                </Grid>
             )}
-        </>
+        </Grid>
     );
 }
 
