@@ -64,22 +64,27 @@ function Dashboard() {
     const [loading, setLoading] = useState(1);
     const [open, setOpen] = useState(true);
     const [token, user, login, logout] = useOutletContext();
+    const [data, setData] = useState(null);
 
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
     useEffect(() => {
-        const params = { token: token };
-        auth.get("/api/v1/jobs", params)
-            .then((res) => {
-                setLoading(0);
-            })
-            .catch((err) => {
-                const { msg } = err.response.data;
-                setError(msg);
-                logout();
-            });
+        if (!data) {
+            const params = { token: token };
+            auth.get("/api/v1/jobs", params)
+                .then(({ data }) => {
+                    console.dir(data);
+                    setData(data);
+                    setLoading(0);
+                })
+                .catch((err) => {
+                    const { msg } = err.response.data;
+                    setError(msg);
+                    logout();
+                });
+        }
     });
 
     /**
@@ -147,7 +152,13 @@ function Dashboard() {
                                                 height: 240,
                                             }}
                                         >
-                                            COMPONENT - 1
+                                            {data.jobs.map((itm) => (
+                                                <li key={itm._id}>
+                                                    {itm.company}
+                                                    {" | "}
+                                                    {itm.position}
+                                                </li>
+                                            ))}
                                         </Paper>
                                     </Grid>
                                     {/* Recent Deposits */}
