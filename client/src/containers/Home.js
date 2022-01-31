@@ -1,3 +1,7 @@
+/**
+ * [TODO] : Setup Home Route
+ */
+
 const Home = () => {
     return (
         <div>

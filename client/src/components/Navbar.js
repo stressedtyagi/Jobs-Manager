@@ -31,6 +31,9 @@ const Navbar = (props) => {
         navigate("");
     };
 
+    /**
+     * [TODO] : UPDATE NAVBAR : Better Styling, Better Buttons
+     */
     return (
         <nav
             style={{

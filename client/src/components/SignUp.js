@@ -12,6 +12,10 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Copyright from "./Copyright";
 
+/**
+ * [TODO] : Setup SignUp Functionality
+ */
+
 function SignUp() {
     const handleSubmit = () => {};
     return (
