@@ -47,11 +47,11 @@ function Dashboard() {
                 })
                 .catch((err) => {
                     const { msg } = err.response.data;
-                    setError(msg);
+                    // setError(msg);
                     logout();
                 });
         }
-    });
+    }, []);
 
     /**
      * [BUG] : By the time Dashboard is rendered `user` state remains null
@@ -68,31 +68,26 @@ function Dashboard() {
     return (
         <Grid
             container
-            direction="row"
-            style={{
-                border: "solid",
-                minWidth: "100%",
-                height: "100vh",
-            }}
+            direction="column"
+            minHeight="100vh"
+            border="1px solid black"
+            height="100vh"
+            justifyContent="center"
         >
             {!user ? (
                 !token ? (
                     <Navigate to="/" />
                 ) : (
-                    <Grid item xs={12}>
+                    <Grid item border="1px solid blue" alignSelf="center">
                         <Loader color="secondary" />
                     </Grid>
                 )
             ) : loading ? (
-                <Grid item xs={12}>
+                <Grid item border="1px solid blue" alignSelf="center">
                     <Loader color="success" />
                 </Grid>
             ) : (
-                <Grid
-                    container
-                    direction="row"
-                    // justifyContent="center"
-                >
+                <>
                     <Grid item xs={4} alignSelf="stretch">
                         <Paper
                             style={{
@@ -109,7 +104,7 @@ function Dashboard() {
                             }}
                         ></Paper>
                     </Grid>
-                </Grid>
+                </>
             )}
         </Grid>
     );
