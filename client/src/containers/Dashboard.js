@@ -1,44 +1,37 @@
 // mui imports
 import {
     Card,
+    Chip,
     CardActions,
     CardContent,
     Button,
     Typography,
     Box,
     Toolbar,
-    List,
-    Divider,
-    IconButton,
     Container,
     Grid,
-    Paper,
 } from "@mui/material";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 
 // other imports
 import { useEffect, useState } from "react";
-import { Navigate, useOutletContext } from "react-router";
+import { Navigate, useNavigate, useOutletContext } from "react-router";
 
 // custom components import
 import Copyright from "../components/Copyright";
 import Loader from "../components/Loader";
-import Drawer from "../components/Drawer";
+import EditForm from "../components/EditForm";
 
 // helpers and utils import
-import { mainListItems } from "../helpers/listItems";
 import auth from "../utils/auth";
 
-const bull = (
-    <Box
-        component="span"
-        sx={{ display: "inline-block", mx: "2px", transform: "scale(0.8)" }}
-    >
-        •
-    </Box>
-);
+const colorMap = {
+    pending: "#fbc02d",
+    interview: "#eb6e47",
+    rejected: "#d32f2f",
+    accepted: "#689f38",
+};
 
-const card = (item) => (
+const card = ({ item, editJobHandler }) => (
     <>
         <CardContent>
             <Typography
@@ -63,8 +56,26 @@ const card = (item) => (
                 {'"a benevolent smile"'}
             </Typography> */}
         </CardContent>
-        <CardActions>
-            <Button size="small">EDIT</Button>
+        <CardActions
+            sx={{
+                display: "grid",
+                gridAutoFlow: "column",
+                justifyContent: "space-between",
+            }}
+        >
+            <Button
+                size="small"
+                style={{ justifyContent: "flex-start" }}
+                onClick={editJobHandler(item)}
+            >
+                EDIT
+            </Button>
+            <Chip
+                label={item.status.toUpperCase()}
+                style={{
+                    backgroundColor: colorMap[item.status],
+                }}
+            />
         </CardActions>
     </>
 );
@@ -72,15 +83,15 @@ const card = (item) => (
 function Dashboard() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(1);
-    const [token, user, login, logout] = useOutletContext();
     const [data, setData] = useState(null);
+    const [editJob, setEditJob] = useState(null);
+    const [token, user, login, logout] = useOutletContext();
 
     useEffect(() => {
         if (!data) {
             const params = { token: token };
             auth.get("/api/v1/jobs", params)
                 .then(({ data }) => {
-                    console.log(data);
                     setData(data);
                     setLoading(0);
                 })
@@ -90,6 +101,11 @@ function Dashboard() {
                 });
         }
     }, []);
+
+    const editJobHandler = (item) => (event) => {
+        event.preventDefault();
+        setEditJob(item);
+    };
 
     /**
      * [BUG] : By the time Dashboard is rendered `user` state remains null
@@ -150,14 +166,16 @@ function Dashboard() {
                             <Grid container spacing={3}>
                                 {!data ? (
                                     <Loader />
+                                ) : editJob ? (
+                                    <EditForm data={editJob} />
                                 ) : (
-                                    data.jobs.map((itm) => (
+                                    data.jobs.map((item) => (
                                         <Grid
                                             item
                                             xs={12}
                                             md={4}
                                             lg={3}
-                                            key={itm._id}
+                                            key={item._id}
                                         >
                                             {/* <Paper
                                                 sx={{
@@ -174,7 +192,7 @@ function Dashboard() {
                                                 variant="outlined"
                                                 sx={{ boxShadow: 3 }}
                                             >
-                                                {card(itm)}
+                                                {card({ item, editJobHandler })}
                                             </Card>
                                         </Grid>
                                     ))
