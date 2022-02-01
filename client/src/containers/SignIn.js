@@ -21,7 +21,7 @@ import { useState } from "react";
 import { Navigate, useOutletContext } from "react-router";
 
 // Custom Component imports
-import Copyright from "./Copyright";
+import Copyright from "../components/Copyright";
 
 // Helper/utils Imports
 import browserActions from "../utils/browserActions";
