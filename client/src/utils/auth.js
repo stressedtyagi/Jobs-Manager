@@ -23,6 +23,20 @@ const auth = {
             }
         );
     },
+    patch: async (url, params) => {
+        const token = params?.token;
+        const data = params?.data;
+
+        return await axios.patch(
+            url,
+            { ...data },
+            {
+                headers: {
+                    Authorization: token,
+                },
+            }
+        );
+    },
 };
 
 export default auth;
