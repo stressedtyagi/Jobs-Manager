@@ -50,11 +50,6 @@ const card = ({ item, editJobHandler }) => (
             <Typography sx={{ mb: 1.5 }} color="text.secondary">
                 {item.position}
             </Typography>
-            {/* <Typography variant="body2">
-                well meaning and kindly.
-                <br />
-                {'"a benevolent smile"'}
-            </Typography> */}
         </CardContent>
         <CardActions
             sx={{
@@ -116,8 +111,7 @@ function Dashboard() {
      */
 
     /**
-     * [TODO] : Add Functioning of edit, delete button for each job card
-     * [TODO] : Add add Badge for [Pending, Interviewed ...] values
+     * [TODO] : Add Functioning of delete button for each job card
      * [TODO] : Add New Job Creating functionality
      */
 
@@ -133,22 +127,6 @@ function Dashboard() {
                 <Loader color="success" />
             ) : (
                 <Box sx={{ display: "flex" }}>
-                    {/* <Drawer variant="permanent" open={open}>
-                        <Toolbar
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "flex-end",
-                                px: [1],
-                            }}
-                        >
-                            <IconButton onClick={toggleDrawer}>
-                                <ChevronLeftIcon />
-                            </IconButton>
-                        </Toolbar>
-                        <Divider />
-                        <List>{mainListItems}</List>
-                    </Drawer> */}
                     <Box
                         component="main"
                         sx={{
@@ -167,7 +145,10 @@ function Dashboard() {
                                 {!data ? (
                                     <Loader />
                                 ) : editJob ? (
-                                    <EditForm data={editJob} />
+                                    <EditForm
+                                        job={[editJob, setEditJob]}
+                                        state={[data, setData]}
+                                    />
                                 ) : (
                                     data.jobs.map((item) => (
                                         <Grid
@@ -177,17 +158,6 @@ function Dashboard() {
                                             lg={3}
                                             key={item._id}
                                         >
-                                            {/* <Paper
-                                                sx={{
-                                                    p: 2,
-                                                    display: "flex",
-                                                    flexDirection: "column",
-                                                    height: 240,
-                                                }}
-                                                elevation={4}
-                                            >
-                                                {"<Deposits />"}
-                                            </Paper> */}
                                             <Card
                                                 variant="outlined"
                                                 sx={{ boxShadow: 3 }}
