@@ -12,6 +12,9 @@ import { useState } from "react";
 import auth from "../utils/auth";
 import browserActions from "../utils/browserActions";
 
+/**
+ * @note : redundent code, also used in AddForm.js
+ */
 const status = [
     {
         value: "pending",

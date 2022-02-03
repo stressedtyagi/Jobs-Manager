@@ -2,6 +2,7 @@
 import {
     Card,
     Chip,
+    Tooltip,
     CardActions,
     CardContent,
     Button,
@@ -10,7 +11,14 @@ import {
     Toolbar,
     Container,
     Grid,
+    IconButton,
+    Backdrop,
+    SpeedDial,
+    SpeedDialIcon,
+    SpeedDialAction,
+    TextField,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 // other imports
 import { useEffect, useState } from "react";
@@ -20,6 +28,7 @@ import { Navigate, useNavigate, useOutletContext } from "react-router";
 import Copyright from "../components/Copyright";
 import Loader from "../components/Loader";
 import EditForm from "../components/EditForm";
+import AddForm from "../components/AddForm";
 
 // helpers and utils import
 import auth from "../utils/auth";
@@ -31,7 +40,11 @@ const colorMap = {
     accepted: "#689f38",
 };
 
-const card = ({ item, editJobHandler }) => (
+/**
+ *
+ * @todo correct stlying of card
+ */
+const card = ({ item, editJobHandler, deleteJobHandler }) => (
     <>
         <CardContent>
             <Typography
@@ -56,6 +69,7 @@ const card = ({ item, editJobHandler }) => (
                 display: "grid",
                 gridAutoFlow: "column",
                 justifyContent: "space-between",
+                // border: "1px solid black",
             }}
         >
             <Button
@@ -71,6 +85,15 @@ const card = ({ item, editJobHandler }) => (
                     backgroundColor: colorMap[item.status],
                 }}
             />
+            <Tooltip title="Delete">
+                <IconButton
+                    aria-label="delete"
+                    size="small"
+                    onClick={deleteJobHandler(item)}
+                >
+                    <DeleteIcon fontSize="inherit" />
+                </IconButton>
+            </Tooltip>
         </CardActions>
     </>
 );
@@ -80,6 +103,7 @@ function Dashboard() {
     const [loading, setLoading] = useState(1);
     const [data, setData] = useState(null);
     const [editJob, setEditJob] = useState(null);
+    const [backdrop, setBackdrop] = useState(false);
     const [token, user, login, logout] = useOutletContext();
 
     useEffect(() => {
@@ -97,9 +121,58 @@ function Dashboard() {
         }
     }, []);
 
+    /**
+     * @todo : refractor this code
+     * @param {item to be deleted} item
+     * @returns
+     */
+    const deleteJobHandler = (item) => (event) => {
+        /**
+         * @bug : some error with filter
+         */
+        event.preventDefault();
+        auth.delete(`/api/v1/jobs/${item._id}`, { token })
+            .then((res) => {
+                const newData = data.jobs.filter((itm) => itm._id !== item._id);
+                setData({ count: data.count - 1, jobs: newData });
+            })
+            .catch((err) => console.dir(err));
+    };
+
+    /**
+     *
+     * @param {item to edit} item
+     * @returns null
+     */
     const editJobHandler = (item) => (event) => {
         event.preventDefault();
         setEditJob(item);
+    };
+
+    /**
+     * @todo : refractor this code
+     * @param {item to be added} item
+     * @returns
+     */
+    const addJobHandler = (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const params = {
+            data: {
+                position: formData.get("position"),
+                company: formData.get("company"),
+                status: formData.get("status"),
+            },
+            token,
+        };
+        auth.post("/api/v1/jobs", params)
+            .then(({ data: { job: newJob } }) => {
+                const updatedJobs = data.jobs.map((itm) => itm);
+                updatedJobs.push(newJob);
+                setData({ count: data.count + 1, jobs: updatedJobs });
+                setBackdrop(false);
+            })
+            .catch((err) => console.log(err.msg));
     };
 
     /**
@@ -111,8 +184,15 @@ function Dashboard() {
      */
 
     /**
-     * [TODO] : Add Functioning of delete button for each job card
-     * [TODO] : Add New Job Creating functionality
+     * @todo: Add Functioning of delete button for each job card
+     * @todo: Add New Job Creating functionality
+     * @todo: do something for error state
+     * @todo: add the copyright component to footer
+     * @todo: refractor the files that handle all these job requests calls to server
+     * @todo: Add confirmation before deleting a job
+     * @todo: correct the logic used to update the ui when no jobs are present in data state
+     * @bug : when on edit route at each refresh dashboard is appearing, do some changes with editJob
+     * state initial value
      */
 
     return (
@@ -142,6 +222,41 @@ function Dashboard() {
                         <Toolbar />
                         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                             <Grid container spacing={3}>
+                                <Backdrop open={backdrop} />
+                                <SpeedDial
+                                    ariaLabel="SpeedDial tooltip example"
+                                    sx={{
+                                        position: "absolute",
+                                        bottom: 16,
+                                        right: 16,
+                                        border: "1px solid black",
+                                    }}
+                                    icon={
+                                        <SpeedDialIcon
+                                            onClick={() =>
+                                                setBackdrop(!backdrop)
+                                            }
+                                        />
+                                    }
+                                    /**
+                                     * Commented to alter the default action of SpeedDial
+                                     *
+                                     * onClose={() => setBackdrop(false)}
+                                     * onOpen={() => setBackdrop(true)}
+                                     */
+                                    open={backdrop}
+                                    direction="left"
+                                >
+                                    <Box
+                                        visibility={
+                                            backdrop ? "visible" : "hidden"
+                                        }
+                                        component="form"
+                                        onSubmit={addJobHandler}
+                                    >
+                                        <AddForm />
+                                    </Box>
+                                </SpeedDial>
                                 {!data ? (
                                     <Loader />
                                 ) : editJob ? (
@@ -149,6 +264,8 @@ function Dashboard() {
                                         job={[editJob, setEditJob]}
                                         state={[data, setData]}
                                     />
+                                ) : data.count === 0 ? (
+                                    "ADD SOME COMPONENT FOR WHEN NO JOBS ARE HERE"
                                 ) : (
                                     data.jobs.map((item) => (
                                         <Grid
@@ -162,7 +279,11 @@ function Dashboard() {
                                                 variant="outlined"
                                                 sx={{ boxShadow: 3 }}
                                             >
-                                                {card({ item, editJobHandler })}
+                                                {card({
+                                                    item,
+                                                    editJobHandler,
+                                                    deleteJobHandler,
+                                                })}
                                             </Card>
                                         </Grid>
                                     ))
