@@ -1,3 +1,7 @@
+/**
+ * @note : USELESS CODE REMOVE WHENEVER NEEDED
+ */
+
 import { styled } from "@mui/material";
 import MuiDrawer from "@mui/material/Drawer";
 

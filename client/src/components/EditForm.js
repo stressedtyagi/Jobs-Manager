@@ -60,7 +60,6 @@ const EditForm = ({ job, state }) => {
                     token: browserActions.getLocalStorage("token"),
                 });
                 const newData = data.jobs.map((job) => {
-                    console.log(job);
                     return job._id === updatedJob._id ? updatedJob : job;
                 });
 
