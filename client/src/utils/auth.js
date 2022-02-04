@@ -13,6 +13,7 @@ const auth = {
     post: async (url, params) => {
         const token = params?.token;
         const data = params?.data;
+
         return await axios.post(
             url,
             { ...data },

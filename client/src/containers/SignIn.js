@@ -15,8 +15,7 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 
-// other imports
-import axios from "axios";
+// other package imports
 import { useState } from "react";
 import { Navigate, useOutletContext } from "react-router";
 
@@ -25,6 +24,7 @@ import Copyright from "../components/Copyright";
 
 // Helper/utils Imports
 import browserActions from "../utils/browserActions";
+import auth from "../utils/auth";
 
 function SignIn() {
     const [error, setError] = useState("");
@@ -37,22 +37,21 @@ function SignIn() {
         const email = formData.get("email");
         const password = formData.get("password");
 
-        const response = await axios
-            .post("/api/v1/auth/login", {
-                email,
-                password,
+        const data = { email, password };
+
+        auth.post("/api/v1/auth/login", { data })
+            .then((response) => {
+                const token = response?.data?.token;
+
+                if (token) {
+                    const accessToken = "Bearer " + token;
+                    browserActions.setLocalStorage("token", accessToken);
+                    login(accessToken);
+                }
             })
             .catch((error) => {
                 setError(error.response.data.msg);
             });
-
-        const token = response?.data?.token;
-
-        if (token) {
-            const accessToken = "Bearer " + token;
-            browserActions.setLocalStorage("token", accessToken);
-            login(accessToken);
-        }
     };
 
     /**
@@ -148,7 +147,6 @@ function SignIn() {
                             </Grid>
                         </Box>
                     </Box>
-                    <Copyright sx={{ mt: 5 }} />
                 </Container>
             )}
         </>

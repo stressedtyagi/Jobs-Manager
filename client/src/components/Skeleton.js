@@ -11,12 +11,6 @@ import browserActions from "../utils/browserActions";
 import auth from "../utils/auth";
 
 const Skeleton = () => {
-    /**
-     * If there is token available in localStorage the use that token as
-     * state value otherwise initialize it to 0
-     *
-     * TODO: Setting up random token value also let user to login
-     */
     const [token, setToken] = useState(
         () => browserActions.getLocalStorage("token") || null
     );
