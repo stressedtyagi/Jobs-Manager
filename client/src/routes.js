@@ -19,7 +19,7 @@ export default function Router() {
                     [TODO] : Redirect User to this route if user click edit button. 
                     Currently there route serve no purpose
                 */}
-                <Route path="editjob" element={<EditForm />} />
+                {/* <Route path="editjob" element={<EditForm />} /> */}
             </Route>
             <Route path="*" element={<Page404 />} />
         </Routes>
