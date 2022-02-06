@@ -1,13 +1,16 @@
-/**
- * [TODO] : Setup Home Route
- */
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        minHeight: "100vh",
+        backgroundImage: `url(${process.env.PUBLIC_URL + "/assets/home.jpg"})`,
+        backgroundRepeat: "no-repeat",
+    },
+}));
 
 const Home = () => {
-    return (
-        <div>
-            <h1>Home</h1>
-        </div>
-    );
+    const classes = useStyles();
+    return <div className={classes.root}>HOME</div>;
 };
 
 export default Home;
