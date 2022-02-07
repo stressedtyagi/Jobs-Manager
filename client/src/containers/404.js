@@ -1,7 +1,8 @@
 import { Button, Container, Grid, Typography } from "@mui/material";
+import { useNavigate } from "react-router";
+import "../style.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto-mono";
-import { useNavigate } from "react-router";
 
 const Page404 = () => {
     const navigator = useNavigate();
@@ -25,18 +26,13 @@ const Page404 = () => {
                 >
                     <Typography
                         variant="h1"
-                        sx={{
-                            fontFamily: "Roboto Mono",
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, -350px)",
-                        }}
+                        className="title-404"
+                        fontFamily="Roboto Mono"
                     >
                         404
                     </Typography>
                     <img
-                        src={require("../assets/notFound.gif")}
+                        src="https://cdn.dribbble.com/users/285475/screenshots/2083086/dribbble_1.gif"
                         alt="loading..."
                         width="100%"
                     />
@@ -44,13 +40,8 @@ const Page404 = () => {
                         gutterBottom
                         variant="body1"
                         textAlign="center"
-                        sx={{
-                            fontFamily: "Roboto Mono",
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, 250px)",
-                        }}
+                        className="discription-404"
+                        fontFamily="Roboto Mono"
                     >
                         Look like you're lost the page you are looking for not
                         available!
@@ -59,13 +50,8 @@ const Page404 = () => {
                         variant="contained"
                         color="success"
                         size="large"
-                        sx={{
-                            fontFamily: "Roboto Mono",
-                            position: "absolute",
-                            top: "50%",
-                            left: "50%",
-                            transform: "translate(-50%, 310px)",
-                        }}
+                        className="btn-404"
+                        fontFamily="Roboto Mono"
                         onClick={() => navigator("/")}
                     >
                         Go to Home
