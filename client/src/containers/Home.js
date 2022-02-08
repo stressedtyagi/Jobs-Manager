@@ -1,17 +1,19 @@
 import { CssBaseline, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import TypeWriter from "typewriter-effect";
-import "../style.css";
+import "@fontsource/roboto-mono";
 
 const useStyles = makeStyles((theme) => ({
     root: {
         minHeight: "100vh",
-        backgroundImage: `url(${process.env.PUBLIC_URL + "/assets/home.jpg"})`,
+        backgroundImage: `url(${
+            process.env.PUBLIC_URL + "/assets/home-2-blur.jpg"
+        })`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         fontSize: "150px",
         fontFamily: "Roboto Mono",
-        color: "#484848",
+        color: "#F0DDD7",
     },
 }));
 
@@ -20,22 +22,47 @@ const Home = () => {
     return (
         <div className={classes.root}>
             <CssBaseline />
-            <Grid container item direction="column">
+            <Grid
+                container
+                item
+                direction="column"
+                style={{
+                    display: "flex",
+                    minHeight: "100vh",
+                    justifyContent: "center",
+                }}
+            >
                 <Grid
                     item
                     container
-                    style={{ display: "flex", alignItems: "center" }}
                     direction="column"
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        // border: "2px solid red",
+                        backgroundColor: "rgb(0,0,0)",
+                        backgroundColor: "rgba(0,0,0, 0.4)",
+                        zIndex: "2",
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -10%)",
+                        width: "80%",
+                    }}
                 >
                     <TypeWriter
                         options={{
-                            strings: ["Jobify"],
+                            strings: ["Jobs", "Modify", "Jobify"],
                             autoStart: true,
                             loop: true,
                         }}
                     />
-                    <Typography gutterBottom variant="h6">
-                        One place to mange all your Jobs !
+                    <Typography
+                        gutterBottom
+                        variant="h6"
+                        style={{ fontFamily: "Roboto Mono" }}
+                    >
+                        One place to mange all your Jobs Applications
                     </Typography>
                 </Grid>
             </Grid>
