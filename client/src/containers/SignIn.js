@@ -19,9 +19,6 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { useState } from "react";
 import { Navigate, useOutletContext } from "react-router";
 
-// Custom Component imports
-import Copyright from "../components/Copyright";
-
 // Helper/utils Imports
 import browserActions from "../utils/browserActions";
 import auth from "../utils/auth";
@@ -36,7 +33,7 @@ function SignIn() {
         const formData = new FormData(event.currentTarget);
         const email = formData.get("email");
         const password = formData.get("password");
-
+        const rememberMe = formData.get("rememberMe");
         const data = { email, password };
 
         auth.post("/api/v1/auth/login", { data })
@@ -45,7 +42,9 @@ function SignIn() {
 
                 if (token) {
                     const accessToken = "Bearer " + token;
-                    browserActions.setLocalStorage("token", accessToken);
+                    if (rememberMe) {
+                        browserActions.setLocalStorage("token", accessToken);
+                    }
                     login(accessToken);
                 }
             })
@@ -54,12 +53,18 @@ function SignIn() {
             });
     };
 
-    /**
-     * [TODO] : ReStyle Signin and SignUP
-     */
-
     return (
-        <>
+        <Box
+            style={{
+                border: "0.1px solid black",
+                minHeight: "100vh",
+                background: "#ECE9E6" /* fallback for old browsers */,
+                background:
+                    "-webkit-linear-gradient(to right, #FFFFFF, #ECE9E6)" /* Chrome 10-25, Safari 5.1-6 */,
+                background:
+                    "linear-gradient(to right, #FFFFFF, #ECE9E6)" /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */,
+            }}
+        >
             {user ? (
                 <Navigate to="/dashboard" />
             ) : (
@@ -124,8 +129,9 @@ function SignIn() {
                             <FormControlLabel
                                 control={
                                     <Checkbox
-                                        value="remember"
                                         color="primary"
+                                        name="rememberMe"
+                                        id="rememberMe"
                                     />
                                 }
                                 label="Remember me"
@@ -149,7 +155,7 @@ function SignIn() {
                     </Box>
                 </Container>
             )}
-        </>
+        </Box>
     );
 }
 

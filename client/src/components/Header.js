@@ -83,10 +83,9 @@ function Header({ context }) {
                             }}
                         >
                             <Typography
-                                variant="h6"
+                                variant="h4"
                                 component="div"
                                 sx={{
-                                    fontSize: 30,
                                     fontWeight: "bold",
                                     fontFamily: "Roboto Mono",
                                 }}
@@ -105,7 +104,6 @@ function Header({ context }) {
                                         >
                                             {/* [TODO] Change src to user image */}
                                             {/* [TODO] Setup random bgcolor for each user */}
-                                            {/* Change alt text to user state name */}
                                             <Avatar
                                                 alt={user.name}
                                                 // src="/static/images/avatar/2.jpg"
