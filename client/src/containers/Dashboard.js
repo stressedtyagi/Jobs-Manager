@@ -17,15 +17,15 @@ import {
     SpeedDialIcon,
     SpeedDialAction,
     TextField,
+    CssBaseline,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 // other imports
 import { useEffect, useState } from "react";
-import { Navigate, useNavigate, useOutletContext } from "react-router";
+import { Navigate, useOutletContext } from "react-router";
 
 // custom components import
-import Copyright from "../components/Copyright";
 import Loader from "../components/Loader";
 import EditForm from "../components/EditForm";
 import AddForm from "../components/AddForm";
@@ -42,14 +42,24 @@ const colorMap = {
 
 /**
  *
- * @todo correct stlying of card
+ * @todo Move this to different component
  */
 const card = ({ item, editJobHandler, deleteJobHandler }) => (
     <>
         <CardContent>
+            <Tooltip title="Delete">
+                <IconButton
+                    aria-label="delete"
+                    size="small"
+                    onClick={deleteJobHandler(item)}
+                >
+                    <HighlightOffIcon fontSize="inherit" />
+                </IconButton>
+            </Tooltip>
             <Typography
+                variant="body2"
                 sx={{
-                    fontSize: 14,
+                    alignSelf: "right",
                     textAlign: "right",
                 }}
                 color="text.secondary"
@@ -72,28 +82,21 @@ const card = ({ item, editJobHandler, deleteJobHandler }) => (
                 // border: "1px solid black",
             }}
         >
-            <Button
-                size="small"
-                style={{ justifyContent: "flex-start" }}
-                onClick={editJobHandler(item)}
-            >
-                EDIT
-            </Button>
+            <Tooltip title="Edit">
+                <Button
+                    size="small"
+                    style={{ justifyContent: "flex-start" }}
+                    onClick={editJobHandler(item)}
+                >
+                    EDIT
+                </Button>
+            </Tooltip>
             <Chip
                 label={item.status.toUpperCase()}
                 style={{
                     backgroundColor: colorMap[item.status],
                 }}
             />
-            <Tooltip title="Delete">
-                <IconButton
-                    aria-label="delete"
-                    size="small"
-                    onClick={deleteJobHandler(item)}
-                >
-                    <DeleteIcon fontSize="inherit" />
-                </IconButton>
-            </Tooltip>
         </CardActions>
     </>
 );
@@ -207,13 +210,17 @@ function Dashboard() {
                 <Loader color="success" />
             ) : (
                 <Box sx={{ display: "flex" }}>
+                    <CssBaseline />
                     <Box
                         component="main"
                         sx={{
-                            backgroundColor: (theme) =>
-                                theme.palette.mode === "light"
-                                    ? theme.palette.grey[100]
-                                    : theme.palette.grey[900],
+                            background:
+                                "#232526" /* fallback for old browsers */,
+                            background:
+                                "-webkit-linear-gradient(to right, #232526, #414345)" /* Chrome 10-25, Safari 5.1-6 */,
+                            background:
+                                "linear-gradient(to right, #232526, #414345)" /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */,
+
                             flexGrow: 1,
                             height: "100vh",
                             overflow: "auto",
