@@ -27,6 +27,11 @@ function SignIn() {
     const [error, setError] = useState("");
     const [token, user, login, logout] = useOutletContext();
 
+    /**
+     * @note did a trick here while implementing rememberMe functionality
+     * added a key['expiry'] in localStorage with value as current time + 10hrs
+     * now if we try to comeback after 10 hrs the system will automatically logout us
+     */
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -41,10 +46,17 @@ function SignIn() {
                 const token = response?.data?.token;
 
                 if (token) {
-                    const accessToken = "Bearer " + token;
-                    if (rememberMe) {
-                        browserActions.setLocalStorage("token", accessToken);
+                    if (!rememberMe) {
+                        const now = new Date();
+                        now.setHours(now.getHours() + 10);
+                        browserActions.setLocalStorage("expiry", now.getTime());
+                    } else {
+                        // remove previous expiry key if present
+                        browserActions.removeLocalStorage("expiry");
                     }
+
+                    const accessToken = "Bearer " + token;
+                    browserActions.setLocalStorage("token", accessToken);
                     login(accessToken);
                 }
             })

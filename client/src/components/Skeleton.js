@@ -17,6 +17,22 @@ const Skeleton = () => {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
+        /**
+         * Code to implement remeber me functionality
+         * If there is expiry key in localStoarage
+         * then check if the difference between current time
+         * and time when we last login is negative or not.
+         * [-ve] : logout()
+         * [+ve] : do nothing
+         */
+        const expiry = browserActions.getLocalStorage("expiry");
+        if (
+            expiry &&
+            new Date().getHours() - new Date(expiry).getHours() <= 0
+        ) {
+            logout();
+        }
+
         if (!user && token) {
             const params = {
                 token: token,
