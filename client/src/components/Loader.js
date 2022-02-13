@@ -1,5 +1,4 @@
-import { CircularProgress, Stack } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { Backdrop, CircularProgress, Stack } from "@mui/material";
 
 const Loader = (props) => {
     return (
@@ -9,7 +8,9 @@ const Loader = (props) => {
             height="100vh"
             justifyContent="center"
         >
-            <CircularProgress size={80} {...props} />
+            <Backdrop open={true} sx={{ color: "#fff" }}>
+                <CircularProgress size={80} {...props} />
+            </Backdrop>
         </Stack>
     );
 };
