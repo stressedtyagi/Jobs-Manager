@@ -1,25 +1,15 @@
 // mui imports
 import {
     Card,
-    Chip,
-    Tooltip,
-    CardActions,
-    CardContent,
-    Button,
-    Typography,
     Box,
     Toolbar,
     Container,
     Grid,
-    IconButton,
     Backdrop,
     SpeedDial,
     SpeedDialIcon,
-    SpeedDialAction,
-    TextField,
     CssBaseline,
 } from "@mui/material";
-import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 // other imports
 import { useEffect, useState } from "react";
@@ -29,77 +19,10 @@ import { Navigate, useOutletContext } from "react-router";
 import Loader from "../components/Loader";
 import EditForm from "../components/EditForm";
 import AddForm from "../components/AddForm";
+import { JobCard } from "../components/JobCard";
 
 // helpers and utils import
 import auth from "../utils/auth";
-
-const colorMap = {
-    pending: "#fbc02d",
-    interview: "#eb6e47",
-    rejected: "#d32f2f",
-    accepted: "#689f38",
-};
-
-/**
- *
- * @todo Move this to different component
- */
-const card = ({ item, editJobHandler, deleteJobHandler }) => (
-    <>
-        <CardContent>
-            <Tooltip title="Delete">
-                <IconButton
-                    aria-label="delete"
-                    size="small"
-                    onClick={deleteJobHandler(item)}
-                >
-                    <HighlightOffIcon fontSize="inherit" />
-                </IconButton>
-            </Tooltip>
-            <Typography
-                variant="body2"
-                sx={{
-                    alignSelf: "right",
-                    textAlign: "right",
-                }}
-                color="text.secondary"
-                gutterBottom
-            >
-                {new Date(item.createdAt).toDateString("en-US")}
-            </Typography>
-            <Typography variant="h5" component="div">
-                {item.company.toUpperCase()}
-            </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {item.position}
-            </Typography>
-        </CardContent>
-        <CardActions
-            sx={{
-                display: "grid",
-                gridAutoFlow: "column",
-                justifyContent: "space-between",
-                // border: "1px solid black",
-            }}
-        >
-            <Tooltip title="Edit">
-                <Button
-                    size="small"
-                    style={{ justifyContent: "flex-start" }}
-                    onClick={editJobHandler(item)}
-                >
-                    EDIT
-                </Button>
-            </Tooltip>
-            <Chip
-                label={item.status.toUpperCase()}
-                style={{
-                    backgroundColor: colorMap[item.status],
-                }}
-            />
-        </CardActions>
-    </>
-);
 
 function Dashboard() {
     const [error, setError] = useState("");
@@ -127,7 +50,7 @@ function Dashboard() {
     /**
      * @todo : refractor this code
      * @param {item to be deleted} item
-     * @returns
+     * @returns null
      */
     const deleteJobHandler = (item) => (event) => {
         /**
@@ -135,7 +58,7 @@ function Dashboard() {
          */
         event.preventDefault();
         auth.delete(`/api/v1/jobs/${item._id}`, { token })
-            .then((res) => {
+            .then(() => {
                 const newData = data.jobs.filter((itm) => itm._id !== item._id);
                 setData({ count: data.count - 1, jobs: newData });
             })
@@ -155,7 +78,7 @@ function Dashboard() {
     /**
      * @todo : refractor this code
      * @param {item to be added} item
-     * @returns
+     * @returns null
      */
     const addJobHandler = (event) => {
         event.preventDefault();
@@ -187,10 +110,7 @@ function Dashboard() {
      */
 
     /**
-     * @todo: Add Functioning of delete button for each job card
-     * @todo: Add New Job Creating functionality
      * @todo: do something for error state
-     * @todo: add the copyright component to footer
      * @todo: refractor the files that handle all these job requests calls to server
      * @todo: Add confirmation before deleting a job
      * @todo: correct the logic used to update the ui when no jobs are present in data state
@@ -246,8 +166,7 @@ function Dashboard() {
                                         />
                                     }
                                     /**
-                                     * Commented to alter the default action of SpeedDial
-                                     *
+                                     * [Commented to alter the default action of SpeedDial]
                                      * onClose={() => setBackdrop(false)}
                                      * onOpen={() => setBackdrop(true)}
                                      */
@@ -286,11 +205,15 @@ function Dashboard() {
                                                 variant="outlined"
                                                 sx={{ boxShadow: 3 }}
                                             >
-                                                {card({
-                                                    item,
-                                                    editJobHandler,
-                                                    deleteJobHandler,
-                                                })}
+                                                <JobCard
+                                                    item={item}
+                                                    editJobHandler={
+                                                        editJobHandler
+                                                    }
+                                                    deleteJobHandler={
+                                                        deleteJobHandler
+                                                    }
+                                                />
                                             </Card>
                                         </Grid>
                                     ))
