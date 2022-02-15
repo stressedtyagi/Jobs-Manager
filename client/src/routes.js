@@ -15,11 +15,6 @@ export default function Router() {
                 <Route path="signup" element={<SignUp />} />
                 <Route path="signin" element={<SignIn />} />
                 <Route path="dashboard" element={<Dashboard />} />
-                {/* 
-                    [TODO] : Redirect User to this route if user click edit button. 
-                    Currently there route serve no purpose
-                */}
-                {/* <Route path="editjob" element={<EditForm />} /> */}
             </Route>
             <Route path="*" element={<Page404 />} />
         </Routes>

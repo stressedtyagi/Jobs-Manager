@@ -20,6 +20,7 @@ import Loader from "../components/Loader";
 import EditForm from "../components/EditForm";
 import AddForm from "../components/AddForm";
 import { JobCard } from "../components/JobCard";
+import Notification from "../components/Notification";
 
 // helpers and utils import
 import auth from "../utils/auth";
@@ -42,27 +43,28 @@ function Dashboard() {
                 })
                 .catch((err) => {
                     const { msg } = err.response.data;
+                    setError({ type: "error", msg: msg || err.response.data });
                     logout();
                 });
         }
     }, []);
 
     /**
-     * @todo : refractor this code
      * @param {item to be deleted} item
      * @returns null
      */
     const deleteJobHandler = (item) => (event) => {
-        /**
-         * @bug : some error with filter
-         */
         event.preventDefault();
         auth.delete(`/api/v1/jobs/${item._id}`, { token })
             .then(() => {
                 const newData = data.jobs.filter((itm) => itm._id !== item._id);
                 setData({ count: data.count - 1, jobs: newData });
             })
-            .catch((err) => console.dir(err));
+            .catch((err) => {
+                const { msg } = err.response.data;
+                setError({ type: "error", msg: msg || err.response.data });
+                console.dir(err);
+            });
     };
 
     /**
@@ -76,7 +78,6 @@ function Dashboard() {
     };
 
     /**
-     * @todo : refractor this code
      * @param {item to be added} item
      * @returns null
      */
@@ -98,7 +99,11 @@ function Dashboard() {
                 setData({ count: data.count + 1, jobs: updatedJobs });
                 setBackdrop(false);
             })
-            .catch((err) => console.log(err.msg));
+            .catch((err) => {
+                const { msg } = err.response.data;
+                setError({ type: "error", msg: msg || err.response.data });
+                console.dir(err);
+            });
     };
 
     /**
@@ -110,11 +115,9 @@ function Dashboard() {
      */
 
     /**
-     * @todo: do something for error state
      * @todo: refractor the files that handle all these job requests calls to server
-     * @todo: Add confirmation before deleting a job
-     * @todo: correct the logic used to update the ui when no jobs are present in data state
-     * @bug : when on edit route at each refresh dashboard is appearing, do some changes with editJob
+     * @todo: Add confirmation before deleting a job - Alert Dialog
+     * @todo : when on edit route at each refresh dashboard is appearing, do some changes with editJob
      * state initial value
      */
 
@@ -191,7 +194,18 @@ function Dashboard() {
                                         state={[data, setData]}
                                     />
                                 ) : data.count === 0 ? (
-                                    "ADD SOME COMPONENT FOR WHEN NO JOBS ARE HERE"
+                                    <>
+                                        <Notification
+                                            type="info"
+                                            msg="There are no items to display"
+                                        />
+                                        <img
+                                            src="https://i.imgur.com/L5jHP8f.gif"
+                                            // [FUN] src="https://i.imgur.com/QsKU1KI.gif"
+                                            alt="nothing to see here"
+                                            width="100%"
+                                        />
+                                    </>
                                 ) : (
                                     data.jobs.map((item) => (
                                         <Grid
@@ -217,6 +231,14 @@ function Dashboard() {
                                             </Card>
                                         </Grid>
                                     ))
+                                )}
+                                {error ? (
+                                    <Notification
+                                        type={error.type}
+                                        msg={error.msg}
+                                    />
+                                ) : (
+                                    ""
                                 )}
                             </Grid>
                         </Container>

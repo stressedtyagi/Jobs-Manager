@@ -18,7 +18,7 @@ const Skeleton = () => {
 
     useEffect(() => {
         /**
-         * Code to implement remeber me functionality
+         * Code to implement remember me functionality
          * If there is expiry key in localStoarage
          * then check if the difference between current time
          * and time when we last login is negative or not.
