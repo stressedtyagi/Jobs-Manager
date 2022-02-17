@@ -3,13 +3,17 @@ import { Link, Typography } from "@mui/material";
 function Copyright(props) {
     return (
         <Typography
-            variant="body2"
+            variant="body1"
             color="text.secondary"
             align="center"
             {...props}
         >
             {"Copyright © "}
-            <Link color="inherit" href="https://github.com/creatorgaming">
+            <Link
+                color="inherit"
+                href="https://github.com/stressedtyagi"
+                target="_blank"
+            >
                 Divyanshu Tyagi
             </Link>{" "}
             {new Date().getFullYear()}

@@ -7,37 +7,19 @@ import {
     MenuItem,
     Button,
 } from "@mui/material";
+import { useSnackbar } from "notistack";
 import { Box } from "@mui/system";
 import { useState } from "react";
 import auth from "../utils/auth";
 import browserActions from "../utils/browserActions";
-
-/**
- * @note : redundent code, also used in AddForm.js
- */
-const status = [
-    {
-        value: "pending",
-        label: "Pending",
-    },
-    {
-        value: "interview",
-        label: "Interview",
-    },
-    {
-        value: "declined",
-        label: "Declined",
-    },
-    {
-        value: "accepted",
-        label: "Accepted",
-    },
-];
+import { status } from "../helpers/jobStatus";
 
 const EditForm = ({ job, state }) => {
     const [editJob, setEditJob] = job;
     const [data, setData] = state;
     const [currStatus, setCurrStatus] = useState(editJob.status);
+
+    const { enqueueSnackbar } = useSnackbar();
 
     const handleUpdate = async (event) => {
         event.preventDefault();
@@ -64,38 +46,43 @@ const EditForm = ({ job, state }) => {
                 });
 
                 setData({ count: data.count, jobs: newData });
+
+                enqueueSnackbar("Job updated successfully", {
+                    variant: "info",
+                    autoHideDuration: "1000",
+                });
             } catch (err) {}
         }
     };
-
-    /**
-     * @todo: do some styling for the edit page
-     * @todo: add toast for new update added
-     */
 
     return (
         <>
             <Container
                 component="main"
                 maxWidth="sm"
-                sx={{ mb: 4, border: "2px solid black" }}
+                sx={{ background: "white", borderRadius: 1.5 }}
             >
                 <Paper
                     variant="outlined"
-                    sx={{ my: { xs: 3, md: 3 }, p: { xs: 2, md: 2 } }}
+                    sx={{
+                        my: { xs: 3, md: 3 },
+                        p: { xs: 2, md: 2 },
+                        background: "#1976d2",
+                        color: "white",
+                    }}
                 >
-                    <Typography variant="h5" align="center">
+                    <Typography
+                        variant="h5"
+                        align="center"
+                        sx={{ fontWeight: "bold" }}
+                    >
                         Edit Job
                     </Typography>
                 </Paper>
                 <Typography variant="h6" gutterBottom>
                     Job Details
                 </Typography>
-                <Box
-                    component="form"
-                    onSubmit={handleUpdate}
-                    // sx={{ border: "1px solid red" }}
-                >
+                <Box component="form" onSubmit={handleUpdate}>
                     <Grid container spacing={3}>
                         <Grid item xs={12} md={12}>
                             <TextField
@@ -147,21 +134,23 @@ const EditForm = ({ job, state }) => {
                                 ))}
                             </TextField>
                         </Grid>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            sx={{ mt: 2, mb: 3 }}
-                        >
-                            Update
-                        </Button>
-                        <Button
-                            type="button"
-                            variant="contained"
-                            sx={{ mt: 2, mb: 3, ml: 5 }}
-                            onClick={() => setEditJob(null)}
-                        >
-                            Cancel
-                        </Button>
+                        <Grid item xs={12}>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                sx={{ mt: 2, mb: 3 }}
+                            >
+                                Update
+                            </Button>
+                            <Button
+                                type="button"
+                                variant="contained"
+                                sx={{ mt: 2, mb: 3, ml: 5 }}
+                                onClick={() => setEditJob(null)}
+                            >
+                                Back
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Box>
             </Container>

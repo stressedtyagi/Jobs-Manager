@@ -1,7 +1,10 @@
 import Router from "./routes";
+import { SnackbarProvider } from "notistack";
 function App() {
     return (
-        <Router />
+        <SnackbarProvider maxSnack={5}>
+            <Router />
+        </SnackbarProvider>
     );
 }
 

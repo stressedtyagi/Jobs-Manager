@@ -14,6 +14,7 @@ import {
 // other imports
 import { useEffect, useState } from "react";
 import { Navigate, useOutletContext } from "react-router";
+import { useSnackbar } from "notistack";
 
 // custom components import
 import Loader from "../components/Loader";
@@ -32,6 +33,15 @@ function Dashboard() {
     const [editJob, setEditJob] = useState(null);
     const [backdrop, setBackdrop] = useState(false);
     const [token, user, login, logout] = useOutletContext();
+
+    const { enqueueSnackbar } = useSnackbar();
+
+    const notification = (data) => {
+        enqueueSnackbar(data.msg, {
+            variant: data.variant,
+            autoHideDuration: "1000",
+        });
+    };
 
     useEffect(() => {
         if (!data) {
@@ -59,6 +69,10 @@ function Dashboard() {
             .then(() => {
                 const newData = data.jobs.filter((itm) => itm._id !== item._id);
                 setData({ count: data.count - 1, jobs: newData });
+                notification({
+                    msg: "Job deleted successfully",
+                    variant: "error",
+                });
             })
             .catch((err) => {
                 const { msg } = err.response.data;
@@ -83,7 +97,9 @@ function Dashboard() {
      */
     const addJobHandler = (event) => {
         event.preventDefault();
+        console.dir(event.target);
         const formData = new FormData(event.currentTarget);
+
         const params = {
             data: {
                 position: formData.get("position"),
@@ -98,6 +114,10 @@ function Dashboard() {
                 updatedJobs.push(newJob);
                 setData({ count: data.count + 1, jobs: updatedJobs });
                 setBackdrop(false);
+                notification({
+                    msg: "Job added successfully",
+                    variant: "success",
+                });
             })
             .catch((err) => {
                 const { msg } = err.response.data;
@@ -116,11 +136,6 @@ function Dashboard() {
 
     /**
      * @todo: refractor the files that handle all these job requests calls to server
-     * @todo: Add confirmation before deleting a job - Alert Dialog
-     * @todo: when on edit route at each refresh dashboard is appearing, do some changes with editJob
-     * state initial value
-     * @todo: on update do some notification thing
-     * @todo: on add of new job do some notification thing
      */
 
     return (
@@ -177,17 +192,10 @@ function Dashboard() {
                                     open={backdrop}
                                     direction="left"
                                 >
-                                    <Box
-                                        visibility={
-                                            backdrop ? "visible" : "hidden"
-                                        }
-                                        component="form"
-                                        onSubmit={addJobHandler}
-                                    >
-                                        <AddForm
-                                            state={[backdrop, setBackdrop]}
-                                        />
-                                    </Box>
+                                    <AddForm
+                                        state={[backdrop, setBackdrop]}
+                                        addJob={addJobHandler}
+                                    />
                                 </SpeedDial>
                                 {!data ? (
                                     <Loader />
