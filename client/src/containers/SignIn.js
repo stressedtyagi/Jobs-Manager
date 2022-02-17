@@ -46,13 +46,14 @@ function SignIn() {
                 const token = response?.data?.token;
 
                 if (token) {
-                    if (!rememberMe) {
-                        const now = new Date();
-                        now.setHours(now.getHours() + 10);
-                        browserActions.setLocalStorage("expiry", now.getTime());
-                    } else {
+                    if (rememberMe) {
                         // remove previous expiry key if present
                         browserActions.removeLocalStorage("expiry");
+                    } else {
+                        const now = new Date();
+                        now.setHours(now.getHours() + 10);
+                        browserActions.removeLocalStorage("expiry");
+                        browserActions.setLocalStorage("expiry", now.getTime());
                     }
 
                     const accessToken = "Bearer " + token;

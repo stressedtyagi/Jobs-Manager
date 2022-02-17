@@ -26,11 +26,16 @@ const Skeleton = () => {
          * [+ve] : do nothing
          */
         const expiry = browserActions.getLocalStorage("expiry");
-        if (
-            expiry &&
-            new Date().getHours() - new Date(expiry).getHours() <= 0
-        ) {
-            logout();
+        if (expiry) {
+            const current = new Date();
+            const old = new Date(Number(expiry));
+            if (
+                (current.getDate() === old.getDate() &&
+                    current.getHours() > old.getHours()) ||
+                current.getDate() > old.getDate()
+            ) {
+                logout();
+            }
         }
 
         if (!user && token) {
