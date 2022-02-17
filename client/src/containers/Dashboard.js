@@ -117,8 +117,10 @@ function Dashboard() {
     /**
      * @todo: refractor the files that handle all these job requests calls to server
      * @todo: Add confirmation before deleting a job - Alert Dialog
-     * @todo : when on edit route at each refresh dashboard is appearing, do some changes with editJob
+     * @todo: when on edit route at each refresh dashboard is appearing, do some changes with editJob
      * state initial value
+     * @todo: on update do some notification thing
+     * @todo: on add of new job do some notification thing
      */
 
     return (
@@ -159,7 +161,6 @@ function Dashboard() {
                                         position: "absolute",
                                         bottom: 16,
                                         right: 16,
-                                        border: "1px solid black",
                                     }}
                                     icon={
                                         <SpeedDialIcon
@@ -183,7 +184,9 @@ function Dashboard() {
                                         component="form"
                                         onSubmit={addJobHandler}
                                     >
-                                        <AddForm />
+                                        <AddForm
+                                            state={[backdrop, setBackdrop]}
+                                        />
                                     </Box>
                                 </SpeedDial>
                                 {!data ? (
