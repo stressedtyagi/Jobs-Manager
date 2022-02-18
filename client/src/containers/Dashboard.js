@@ -160,7 +160,6 @@ function Dashboard() {
                                 "-webkit-linear-gradient(to right, #232526, #414345)" /* Chrome 10-25, Safari 5.1-6 */,
                             background:
                                 "linear-gradient(to right, #232526, #414345)" /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */,
-
                             flexGrow: 1,
                             height: "100vh",
                             overflow: "auto",
@@ -214,7 +213,7 @@ function Dashboard() {
                                             src="https://i.imgur.com/L5jHP8f.gif"
                                             // [FUN] src="https://i.imgur.com/QsKU1KI.gif"
                                             alt="nothing to see here"
-                                            width="100%"
+                                            width="70%"
                                         />
                                     </>
                                 ) : (

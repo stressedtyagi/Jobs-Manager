@@ -161,7 +161,7 @@ const AddForm = ({ state, addJob }) => {
             </DialogContent>
             <DialogActions>
                 <Button type="submit" variant="contained" sx={{ mt: 2, mb: 3 }}>
-                    Update
+                    Add Job
                 </Button>
                 <Button
                     type="button"

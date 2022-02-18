@@ -20,7 +20,7 @@ import "@fontsource/roboto-mono";
 import "@fontsource/anonymous-pro";
 import "@fontsource/roboto";
 
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Dashboard", "Logout"];
 
 const darkTheme = createTheme({
     palette: {
