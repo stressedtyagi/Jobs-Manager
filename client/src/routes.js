@@ -5,7 +5,6 @@ import Dashboard from "./containers/Dashboard";
 import Home from "./containers/Home";
 import SignUp from "./containers/SignUp";
 import SignIn from "./containers/SignIn";
-import EditForm from "./components/EditForm";
 
 export default function Router() {
     return (
