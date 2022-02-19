@@ -1,22 +1,54 @@
-#### Setup
+### Setup
 
 ```bash
 npm install && npm start
 ```
 
-#### Database Connection
+### Swagger (API-DOCS)
+
+Read and test the API using swagger UI docs using [this link](https://jobify-server-dt.herokuapp.com/api-docs)
+
+### Database Connection
 
 1. Import connect.js
 2. Invoke in start()
 3. Setup .env in the root
 4. Add MONGO_URI with correct value
 
-#### Routers
+### Routers
 
--   auth.js
--   jobs.js
+-   #### auth.js
+    ```yaml
+    /:
+        type: POST
+        description: "check authentication of user"
+    /register:
+        type: POST
+        description: "register new user"
+    /login:
+        type: POST
+        description: "login existing user"
+    ```
+-   #### jobs.js
+    ```yaml
+    /:
+        type: POST
+        description: "create new job"
+    /:
+        type: GET
+        description: "get all jobs for current user"
+    /{id}:
+        type: PATCH
+        description: "update existing job"
+    /{id}:
+        type: GET
+        description: "get job with jobID"
+    /{id}:
+        type: DELETE
+        description: "delete job"
+    ```
 
-#### User Model
+### User Model
 
 Email Validation Regex
 
@@ -24,7 +56,23 @@ Email Validation Regex
 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 ```
 
-#### Register User
+-   Preprocessor
+    -   pre : convert password into encrypted form before saving into mongoDB
+-   Methods
+    -   createJWT : create JWT token for user authentication
+    -   comparePassword : compare incoming JWT to passwords in DB for user login authentication
+
+### Job Model
+
+Store used information, with following schema
+
+-   company : maxLength `40`
+-   position : maxLength `30`
+-   status : [`interview, pending, declined, accepted`]
+-   createdBy : user(ObjectId)
+-   TimeStamps : True
+
+### Register User
 
 -   Validate - name, email, password - with Mongoose
 -   Hash Password (with bcryptjs)
@@ -32,7 +80,7 @@ Email Validation Regex
 -   Generate Token
 -   Send Response with Token
 
-#### Login User
+### Login User
 
 -   Validate - email, password - in controller
 -   If email or password is missing, throw BadRequestError
@@ -42,13 +90,21 @@ Email Validation Regex
 -   If correct, generate Token
 -   Send Response with Token
 
-#### Mongoose Errors
+### Auth User
+
+-   Check for authorization header
+-   Check for bearer header
+-   Verify JWT token using JWT_SECRET
+-   If authentication failed throw UnauthenticatedError
+-   Send response with ok status with payload received after verifying token
+
+### Mongoose Errors
 
 -   Validation Errors
 -   Duplicate (Email)
 -   Cast Error
 
-#### Security
+### Security
 
 -   helmet
 -   cors : Ensures that API is accessable from different domains

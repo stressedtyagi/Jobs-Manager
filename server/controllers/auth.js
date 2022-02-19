@@ -69,7 +69,7 @@ const checkAuth = async (req, res) => {
     /**
      * Method just to check authenticity of the token provided by client
      */
-    const authHeader = req.headers.authorization;
+    const authHeader = req.headers?.authorization;
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         throw new UnauthenticatedError("Token not provided");

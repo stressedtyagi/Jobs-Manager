@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -26,7 +27,7 @@ const UserSchema = new mongoose.Schema({
     },
 });
 
-// Setting up middleware for mongoose, rather writing code in controlers
+// Setting up middleware for mongoose, rather writing code in controllers
 // Used function keyword here so that `this` keyword will always point to our document in the DB we are inserting
 UserSchema.pre("save", async function (next) {
     const salt = await bcrypt.genSalt(10);

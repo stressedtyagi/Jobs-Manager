@@ -1,0 +1,269 @@
+{
+	"info": {
+		"_postman_id": "46b0c7b7-6447-4f0b-b052-fc10f2f03c48",
+		"name": "06-Jobs-API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.globals.set('accessToken', jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\" : \"test\"\n    \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PROD_URL}}/auth/register",
+							"host": [
+								"{{PROD_URL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();",
+									"pm.globals.set('accessToken', jsonData.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\" : \"dummy@dummy.com\",\n    \"password\" : \"secret\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PROD_URL}}/auth/login",
+							"host": [
+								"{{PROD_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Jobs",
+			"item": [
+				{
+					"name": "GetAllJobs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MWM4NGRkMTY5YzA5ZWFiZWQ3YzdlOTMiLCJuYW1lIjoiRHVtbXkxMjMiLCJpYXQiOjE2NDA1MTcwNzMsImV4cCI6MTY0MzEwOTA3M30.wgdwa-RsU-Z-xB-kmLeAIlMxS0MQ9GBQEORux3fYP-M",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{PROD_URL}}/jobs/",
+							"host": [
+								"{{PROD_URL}}"
+							],
+							"path": [
+								"jobs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Job",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MWM4NGRkMTY5YzA5ZWFiZWQ3YzdlOTMiLCJuYW1lIjoiRHVtbXkxMjMiLCJpYXQiOjE2NDA1MTcwNzMsImV4cCI6MTY0MzEwOTA3M30.wgdwa-RsU-Z-xB-kmLeAIlMxS0MQ9GBQEORux3fYP-M",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"company\": \"zomato\",\n    \"position\": \"backend Developer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PROD_URL}}/jobs/",
+							"host": [
+								"{{PROD_URL}}"
+							],
+							"path": [
+								"jobs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Job",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"company\": \"zomato\",\n    \"position\": \"Q/A Engineer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{PROD_URL}}/jobs/61c855ce8296b6111c6a8c0033",
+							"host": [
+								"{{PROD_URL}}"
+							],
+							"path": [
+								"jobs",
+								"61c855ce8296b6111c6a8c0033"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Job",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{PROD_URL}}/jobs/61c85abe9c0efc472d69937e",
+							"host": [
+								"{{PROD_URL}}"
+							],
+							"path": [
+								"jobs",
+								"61c85abe9c0efc472d69937e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Job",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{PROD_URL}}/jobs/61c855ce8296b6111c6a8c00",
+							"host": [
+								"{{PROD_URL}}"
+							],
+							"path": [
+								"jobs",
+								"61c855ce8296b6111c6a8c00"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
