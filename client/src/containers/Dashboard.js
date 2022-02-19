@@ -97,7 +97,6 @@ function Dashboard() {
      */
     const addJobHandler = (event) => {
         event.preventDefault();
-        console.dir(event.target);
         const formData = new FormData(event.currentTarget);
 
         const params = {
