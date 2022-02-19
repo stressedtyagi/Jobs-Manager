@@ -23,12 +23,6 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import auth from "../utils/auth";
 import browserActions from "../utils/browserActions";
 
-const validateEmail = (email) => {
-    return email.match(
-        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-    );
-};
-
 function SignUp() {
     const [token, user, login, logout] = useOutletContext();
     const [error, setError] = useState("");
@@ -41,16 +35,6 @@ function SignUp() {
             email: formData.get("email"),
             password: formData.get("password"),
         };
-
-        if (
-            validateEmail(userData.email.toLowerCase()) ||
-            userData.password.length < 8
-        ) {
-            setError("Invalid Email or Password is less than 8 characters");
-            throw new Error(
-                "Invalid Email or Password is less than 8 characters"
-            );
-        }
 
         auth.post("/api/v1/auth/register", { data: userData })
             .then((response) => {
