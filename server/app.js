@@ -43,7 +43,7 @@ app.use(xss());
 
 // Base Route
 app.get("/", (req, res) => {
-    res.send("<h1> JOBIFY API </h1> <a href='/api-docs'>API Docs</a>");
+    res.send("<h1> JOBIFY API </h1> <a href='/api-docs'>API Documentation</a>");
 });
 
 // Swagger docs
