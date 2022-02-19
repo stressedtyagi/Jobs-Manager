@@ -40,6 +40,7 @@ function SignUp() {
             .then((response) => {
                 const token = response?.data?.token;
                 if (token) {
+                    browserActions.removeLocalStorage("expiry");
                     const accessToken = "Bearer " + token;
                     browserActions.setLocalStorage("token", accessToken);
                     login(accessToken);
