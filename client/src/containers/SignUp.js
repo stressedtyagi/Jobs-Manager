@@ -35,7 +35,7 @@ function SignUp() {
             email: formData.get("email"),
             password: formData.get("password"),
         };
-
+        console.log(userData);
         auth.post("/api/v1/auth/register", { data: userData })
             .then((response) => {
                 const token = response?.data?.token;
