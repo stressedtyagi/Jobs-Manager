@@ -84,6 +84,6 @@ Dashboard to manage Jobs
 
 ## Mockup of project
 
-![mockup 1](./Mockup/mockup_1.png)
-![mockup 2](./Mockup/mockup_2.png)
-![mockup 3](./Mockup/mockup_3.png)
+![mockup 1](./mockup/mockup_1.png)
+![mockup 2](./mockup/mockup_2.png)
+![mockup 3](./mockup/mockup_3.png)
