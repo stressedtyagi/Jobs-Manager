@@ -1,3 +1,4 @@
+// mui imports
 import {
     Paper,
     Button,
@@ -11,6 +12,7 @@ import {
 } from "@mui/material";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
+// differnt colors for different job status
 const colorMap = {
     pending: "#FFC900",
     interview: "#00EAD3",
@@ -18,6 +20,7 @@ const colorMap = {
     accepted: "#689F38",
 };
 
+// styles for the job card
 const styles = {
     date: {
         alignSelf: "right",
@@ -35,6 +38,12 @@ const styles = {
     },
 };
 
+/**
+ * [PROPS]
+ * @param {item} state - state contains job data component from parent
+ * @param {editJobHandler} method - edit job handler from parent (Dashboard)
+ * @param {deleteJobHandler} method - delete job handler from parent (Dashboard)
+ */
 export const JobCard = ({ item, editJobHandler, deleteJobHandler }) => (
     <Grow
         in={true}
@@ -62,6 +71,7 @@ export const JobCard = ({ item, editJobHandler, deleteJobHandler }) => (
                     color="text.secondary"
                     gutterBottom
                 >
+                    {/* date formating */}
                     {new Date(item.createdAt).toDateString("en-US")}
                 </Typography>
                 <Typography variant="h5" component="div">

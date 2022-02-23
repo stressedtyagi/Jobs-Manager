@@ -13,3 +13,7 @@ const browserActions = {
 };
 
 export default browserActions;
+
+/**
+ * Contains methods to handel all possible browser storage actions
+ */

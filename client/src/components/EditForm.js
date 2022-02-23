@@ -1,3 +1,4 @@
+// mui imports
 import {
     Grid,
     Typography,
@@ -7,30 +8,52 @@ import {
     MenuItem,
     Button,
 } from "@mui/material";
-import { useSnackbar } from "notistack";
 import { Box } from "@mui/system";
+
+// react/other imports
 import { useState } from "react";
+import { useSnackbar } from "notistack";
+
+// helpers and utils import
 import auth from "../utils/auth";
 import browserActions from "../utils/browserActions";
 import { status } from "../helpers/jobStatus";
 
+/**
+ * @props {job, state} - job State has job to edit and state contains data component from parent
+ * @returns EditForm when we click edit btn
+ */
 const EditForm = ({ job, state }) => {
     const [editJob, setEditJob] = job;
     const [data, setData] = state;
     const [currStatus, setCurrStatus] = useState(editJob.status);
 
+    // snackbar displayed on each update of data
     const { enqueueSnackbar } = useSnackbar();
 
+    // event handler for updating job status
     const handleUpdate = async (event) => {
         event.preventDefault();
         const newFormData = new FormData(event.currentTarget);
         const updates = {};
+        /**
+         * loop through all the keys of edit job state
+         * and check there is any change in the old data
+         * and new data entered in form
+         * If there is any change then add it to updates object
+         * */
         for (const obj in editJob) {
             const newData = newFormData.get(obj);
             if (newData && newData !== editJob[obj]) {
                 updates[obj] = newData;
             }
         }
+
+        /**
+         * if there is any change in status then update it
+         * the call update route to server
+         * */
+
         if (Object.keys(updates).length !== 0) {
             try {
                 const {
@@ -46,7 +69,7 @@ const EditForm = ({ job, state }) => {
                 });
 
                 setData({ count: data.count, jobs: newData });
-
+                // on successful update show snackbar
                 enqueueSnackbar("Job updated successfully", {
                     variant: "info",
                     autoHideDuration: "1000",

@@ -1,8 +1,12 @@
+// mui imports
 import Stack from "@mui/material/Stack";
 import Snackbar from "@mui/material/Snackbar";
 import MuiAlert from "@mui/material/Alert";
+
+// react/other imports
 import { useState, forwardRef } from "react";
 
+// Custom alert using snackbar mui
 const Alert = forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });

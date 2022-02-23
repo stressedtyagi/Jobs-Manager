@@ -1,3 +1,4 @@
+// All possible job status
 export const status = [
     {
         value: "pending",

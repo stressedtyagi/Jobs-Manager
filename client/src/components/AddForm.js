@@ -1,3 +1,4 @@
+// mui imports
 import {
     Button,
     Grid,
@@ -12,14 +13,16 @@ import {
     Paper,
 } from "@mui/material";
 import Draggable from "react-draggable";
-
-import { useEffect, useState } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 
+// react/other imports
+import { useEffect, useState } from "react";
+
+// helpers and utils import
 import { status } from "../helpers/jobStatus";
 
 /**
- * @info making dialog draggable
+ * @info Component used for making dialog draggable
  */
 function PaperComponent(props) {
     return (
@@ -32,6 +35,7 @@ function PaperComponent(props) {
     );
 }
 
+// Consists of all styles in page
 const styles = {
     dialogTitle: {
         background: "#1565C0",
@@ -46,14 +50,24 @@ const styles = {
     },
 };
 
+/**
+ * @props {state,addJob} props are passed from parent component
+ * @param {currStatus, company, position} controllers Managing input value inside the form
+ * @returns AddForm when we click on Spinner
+ */
 const AddForm = ({ state, addJob }) => {
     const [currStatus, setCurrStatus] = useState("pending");
     const [company, setCompany] = useState("");
     const [position, setPosition] = useState("");
 
+    /**
+     * @param {Backdrop} state that is passed as props from Dashboard component
+     * @param {open} state manages visibility of Dialog
+     */
     const [backdrop, setBackdrop] = state;
     const [open, setOpen] = useState(true);
 
+    // Whenever backdrop is added or removed change the visibility of {open} state
     useEffect(
         function controlDialog() {
             setOpen(backdrop);
@@ -61,17 +75,20 @@ const AddForm = ({ state, addJob }) => {
         [backdrop]
     );
 
+    // Event handler for clear button
     const clearState = () => {
         setCompany("");
         setPosition("");
         setCurrStatus("pending");
     };
 
+    // Event handler for close button
     const handleClose = () => {
         setOpen(false);
         setBackdrop(false);
     };
 
+    // Event handler for submit button
     const handleSubmit = (event) => {
         clearState();
         addJob(event);
@@ -147,6 +164,8 @@ const AddForm = ({ state, addJob }) => {
                             }
                             variant="standard"
                         >
+                            {/* Maping over the all possible status i.e. coming from 
+                                status helper function */}
                             {status.map((option) => (
                                 <MenuItem
                                     key={option.value}

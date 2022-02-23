@@ -50,3 +50,7 @@ const auth = {
 };
 
 export default auth;
+
+/**
+ * manages all actions realted to server requests and response
+ */

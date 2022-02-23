@@ -1,3 +1,4 @@
+// mui imports
 import {
     AppBar,
     Box,
@@ -13,15 +14,19 @@ import {
 } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
+// react/other imports
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
+// font imports
 import "@fontsource/roboto-mono";
 import "@fontsource/anonymous-pro";
 import "@fontsource/roboto";
 
+// All pages present on clicking user icon on right
 const settings = ["Dashboard", "Logout"];
 
+// Theme
 const darkTheme = createTheme({
     palette: {
         mode: "dark",
@@ -31,15 +36,28 @@ const darkTheme = createTheme({
     },
 });
 
+/**
+ *
+ * @param {context} props -  [user, login, logout]
+ * @param {user} state - user state to maintain user data
+ * @param {login} dispatch - login state to dispatch login event
+ * @param {logout} dispatch - logout state to dispatch logout event
+ */
 function Header({ context }) {
+    /**
+     * @param {anchorEl} state - anchorEl is the anchor element for the menu
+     *
+     */
     const [anchorElUser, setAnchorElUser] = useState(null);
     const [user, login, logout] = context;
     const navigate = useNavigate();
 
+    // event handler for user icon
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
 
+    // event handler for different settings that come on click of user icon
     const handleCloseUserMenu = (setting) => {
         if (setting.toLowerCase() === "logout") {
             logout();
@@ -49,6 +67,7 @@ function Header({ context }) {
         setAnchorElUser(null);
     };
 
+    // event handler for close event on user icon btn
     const handleCloseUserMenuMain = () => {
         setAnchorElUser(null);
     };

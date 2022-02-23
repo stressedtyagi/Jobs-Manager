@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+// Static home page
 const Home = () => {
     const classes = useStyles();
     return (

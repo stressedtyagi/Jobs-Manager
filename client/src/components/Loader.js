@@ -1,5 +1,6 @@
 import { Backdrop, CircularProgress, Stack } from "@mui/material";
 
+// Custom loader for loading screen
 const Loader = (props) => {
     return (
         <Stack alignItems="center" height="100vh" justifyContent="center">

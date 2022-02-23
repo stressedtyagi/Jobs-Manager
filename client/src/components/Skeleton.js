@@ -11,6 +11,7 @@ import browserActions from "../utils/browserActions";
 import auth from "../utils/auth";
 
 const Skeleton = () => {
+    // store/fetch token from local storage
     const [token, setToken] = useState(
         () => browserActions.getLocalStorage("token") || null
     );
@@ -38,6 +39,11 @@ const Skeleton = () => {
             }
         }
 
+        /**
+         * at each render check if token is present
+         * if present then check if user is present
+         * if not present then authenticate user using token and set user
+         */
         if (!user && token) {
             const params = {
                 token: token,
@@ -53,9 +59,16 @@ const Skeleton = () => {
         }
     });
 
+    /**
+     * @description - at login setToken to the token received from server
+     */
     const login = (token) => {
         setToken(token);
     };
+
+    /**
+     * @description - at logout remove token from localStorage, set user to null
+     */
     const logout = () => {
         browserActions.removeLocalStorage("token");
         setToken(null);
@@ -65,6 +78,9 @@ const Skeleton = () => {
     return (
         <>
             <Header context={[user, login, logout]} />
+            {/* USING Outlet component and useOutletContext from react-router hook to 
+                send and receive data in child components of skeleton, 
+                as we are using nested routes here*/}
             <Outlet context={[token, user, login, logout]} />
             <Footer />
         </>

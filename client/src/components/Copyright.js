@@ -1,5 +1,8 @@
 import { Link, Typography } from "@mui/material";
 
+/**
+ * @info Component used to display the copyright information in footer
+ */
 function Copyright(props) {
     return (
         <Typography

@@ -4,6 +4,7 @@ import "../style.css";
 import "@fontsource/roboto/400.css";
 import "@fontsource/roboto-mono";
 
+// 404 notFound page
 const Page404 = () => {
     const navigator = useNavigate();
     return (
