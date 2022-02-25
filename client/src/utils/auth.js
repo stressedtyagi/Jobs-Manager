@@ -1,5 +1,8 @@
 import axios from "axios";
 
+/**
+ * @description : manages all actions realted to server requests and response
+ */
 const auth = {
     get: async (url, params) => {
         const token = params?.token;
@@ -50,7 +53,3 @@ const auth = {
 };
 
 export default auth;
-
-/**
- * manages all actions realted to server requests and response
- */

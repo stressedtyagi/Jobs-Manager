@@ -23,12 +23,18 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import auth from "../utils/auth";
 import browserActions from "../utils/browserActions";
 
+/**
+ * @param {error,setError} state - error state to manages error messages in the form
+ * @param {token,user,login,logout} OutletContext - outlet context coming from parent(Skeleton.js) component to manage user authentication
+ */
 function SignUp() {
     const [token, user, login, logout] = useOutletContext();
     const [error, setError] = useState("");
 
+    // handle signup form submit
     const handleSubmit = (event) => {
         event.preventDefault();
+        // extract user data from form
         const formData = new FormData(event.currentTarget);
         const userData = {
             name: `${formData.get("firstName")} ${formData.get("lastName")}`,
@@ -36,6 +42,7 @@ function SignUp() {
             password: formData.get("password"),
         };
 
+        // call POST route from /api/v1/auth/register endpoint
         auth.post("/api/v1/auth/register", { data: userData })
             .then((response) => {
                 const token = response?.data?.token;
@@ -63,6 +70,7 @@ function SignUp() {
                     "linear-gradient(to right, #FFFFFF, #ECE9E6)" /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */,
             }}
         >
+            {/* If there is `user` object then navigate to dashboard otherwise show signUp form */}
             {user ? (
                 <Navigate to="/dashboard" />
             ) : (
@@ -76,6 +84,7 @@ function SignUp() {
                             alignItems: "center",
                         }}
                     >
+                        {/* There error alert of signUp is managed here */}
                         {error ? (
                             <Alert
                                 severity="error"

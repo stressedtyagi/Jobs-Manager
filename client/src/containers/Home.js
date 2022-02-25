@@ -40,7 +40,6 @@ const Home = () => {
                     style={{
                         display: "flex",
                         alignItems: "center",
-                        // border: "2px solid red",
                         backgroundColor: "rgb(0,0,0)",
                         backgroundColor: "rgba(0,0,0, 0.4)",
                         zIndex: "2",

@@ -1,3 +1,6 @@
+/**
+ * @info : Contains methods to handel all possible browser storage actions
+ */
 const browserActions = {
     getLocalStorage: (key) => {
         return window.localStorage.getItem(key);
@@ -13,7 +16,3 @@ const browserActions = {
 };
 
 export default browserActions;
-
-/**
- * Contains methods to handel all possible browser storage actions
- */

@@ -23,6 +23,10 @@ import { Navigate, useOutletContext } from "react-router";
 import browserActions from "../utils/browserActions";
 import auth from "../utils/auth";
 
+/**
+ * @param {error,setError} state - error state to manages error messages in the form
+ * @param {token,user,login,logout} OutletContext - outlet context coming from parent(Skeleton.js) component to manage user authentication
+ */
 function SignIn() {
     const [error, setError] = useState("");
     const [token, user, login, logout] = useOutletContext();
@@ -47,15 +51,16 @@ function SignIn() {
 
                 if (token) {
                     if (rememberMe) {
-                        // remove previous expiry key if present
+                        // [rememberMe : True]  remove previous expiry key if present, as it might conflict with new expiry key
                         browserActions.removeLocalStorage("expiry");
                     } else {
+                        // [rememberMe : False] set expiry key to current time + 10hrs
                         const now = new Date();
                         now.setHours(now.getHours() + 10);
                         browserActions.removeLocalStorage("expiry");
                         browserActions.setLocalStorage("expiry", now.getTime());
                     }
-
+                    // set token in localStorage
                     const accessToken = "Bearer " + token;
                     browserActions.setLocalStorage("token", accessToken);
                     login(accessToken);
@@ -78,6 +83,7 @@ function SignIn() {
                     "linear-gradient(to right, #FFFFFF, #ECE9E6)" /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */,
             }}
         >
+            {/* If there is `user` object then navigate to dashboard otherwise show signIn form */}
             {user ? (
                 <Navigate to="/dashboard" />
             ) : (
@@ -91,6 +97,7 @@ function SignIn() {
                             alignItems: "center",
                         }}
                     >
+                        {/* There error alert of login form is managed here */}
                         {error ? (
                             <Alert
                                 severity="error"
