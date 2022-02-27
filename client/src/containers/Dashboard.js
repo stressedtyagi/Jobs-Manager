@@ -26,6 +26,15 @@ import Notification from "../components/Notification";
 // helpers and utils import
 import auth from "../utils/auth";
 
+/**
+ * @prop {error,SetError} state - manages the error state that trigers custom notification
+ * @prop {loading,SetLoading} state - manages the loading state that trigers custom loader
+ * @prop {data,setData} state - contains all job data that is displayed on the dashboard
+ * @prop {editJob, setEditJob} state - contains the job data that is being edited
+ * @prop {backdrop, setBackdrop} state - turn on/off the backdrop for add new job btn
+ * @prop {token,user,login,logout} outletContext - props coming from parent component (Skeleton) using useOutletContext hook
+ * @returns
+ */
 function Dashboard() {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(1);
@@ -34,8 +43,10 @@ function Dashboard() {
     const [backdrop, setBackdrop] = useState(false);
     const [token, user, login, logout] = useOutletContext();
 
+    // hook used to display snackbar notifications (mui)
     const { enqueueSnackbar } = useSnackbar();
 
+    // custom notification - using snackbar hook
     const notification = (data) => {
         enqueueSnackbar(data.msg, {
             variant: data.variant,
@@ -43,7 +54,8 @@ function Dashboard() {
         });
     };
 
-    useEffect(() => {
+    // useEffect to fetch all jobs - at initial component mount
+    useEffect(function fetchJobsAtInitialRender() {
         if (!data) {
             const params = { token: token };
             auth.get("/api/v1/jobs", params)
@@ -60,6 +72,7 @@ function Dashboard() {
     }, []);
 
     /**
+     * @function handleDeleteJob - handles the delete job request
      * @param {item to be deleted} item
      * @returns null
      */
@@ -67,7 +80,9 @@ function Dashboard() {
         event.preventDefault();
         auth.delete(`/api/v1/jobs/${item._id}`, { token })
             .then(() => {
+                // filter out the deleted job from the data array
                 const newData = data.jobs.filter((itm) => itm._id !== item._id);
+                // update state with new {count-1, newFilteredData}, and display notification
                 setData({ count: data.count - 1, jobs: newData });
                 notification({
                     msg: "Job deleted successfully",
@@ -82,16 +97,18 @@ function Dashboard() {
     };
 
     /**
-     *
+     * @function handleEditJob - handles the edit job request
      * @param {item to edit} item
      * @returns null
      */
     const editJobHandler = (item) => (event) => {
         event.preventDefault();
+        // set editJob state to the item that is being edited - will render EditForm component
         setEditJob(item);
     };
 
     /**
+     * @function handleAddJob - handles the add job request
      * @param {item to be added} item
      * @returns null
      */
@@ -99,6 +116,7 @@ function Dashboard() {
         event.preventDefault();
         const formData = new FormData(event.currentTarget);
 
+        // get all relevent form data
         const params = {
             data: {
                 position: formData.get("position"),
@@ -107,11 +125,19 @@ function Dashboard() {
             },
             token,
         };
+
+        /**
+         * @description send request to add new job
+         * @response {data : jobs object} - contains the new job data
+         */
         auth.post("/api/v1/jobs", params)
             .then(({ data: { job: newJob } }) => {
+                // updatedJobs : array of jobs with new job added. First map all present jobs and then add the new job
                 const updatedJobs = data.jobs.map((itm) => itm);
                 updatedJobs.push(newJob);
                 setData({ count: data.count + 1, jobs: updatedJobs });
+
+                // reset backdrop to display dashboard and then display notification
                 setBackdrop(false);
                 notification({
                     msg: "Job added successfully",
@@ -139,6 +165,13 @@ function Dashboard() {
 
     return (
         <>
+            {/* user state:
+                [set] : show loader until we fetch data from server
+                [null] : check for token state, as maybe someone has entered random token in localStorage [authentication]
+                    [token {state} : set] - maybe authentication route is still running in skeleton component - show loader 
+                    [token {state} : null] - user is not logged in show home route 
+                                            [this is when someone directly went to this route without 
+                                            any token value on localStorage] */}
             {!user ? (
                 !token ? (
                     <Navigate to="/" />
@@ -177,6 +210,7 @@ function Dashboard() {
                                     }}
                                     icon={
                                         <SpeedDialIcon
+                                            // event listener for speed dial icon (+ icon) [NOT SPEED DIAL Component]
                                             onClick={() =>
                                                 setBackdrop(!backdrop)
                                             }
@@ -195,6 +229,11 @@ function Dashboard() {
                                         addJob={addJobHandler}
                                     />
                                 </SpeedDial>
+                                {/* check data state 
+                                    [null] : check for editJob state
+                                        {editJob state} [set] : show EditForm, send props {job, data} states
+                                        {editJob state} [null] : check if data state has any job or not - if not show notification
+                                    [set] : map over all jobs and show job card */}
                                 {!data ? (
                                     <Loader />
                                 ) : editJob ? (
@@ -241,6 +280,7 @@ function Dashboard() {
                                         </Grid>
                                     ))
                                 )}
+                                {/* Completely seperate from other login, managing snackbar showing in bottom */}
                                 {error ? (
                                     <Notification
                                         type={error.type}
