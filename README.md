@@ -6,6 +6,13 @@ Dashboard to manage Jobs
 
 ![development flow](./mockup/development_flow.png)
 
+## Testing
+
+### Dummy credentials
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`email : test@test.com`\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;`password : secret`
+
 ## Project Structure
 
 ```
