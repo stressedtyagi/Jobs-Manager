@@ -13,10 +13,10 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 -   **Skeleton** : Wrapper route around all other routes of website
 
-    -   **Home** : Home page
-    -   **SignUp** : Signup page for new user
-    -   **SignIn** : Signin page for existing user
-    -   **Dashboard** : Main dashboard
+    -   **`\home`** : Home page
+    -   **`\signup`** : Signup page for new user
+    -   **`\signin`** : Signin page for existing user
+    -   **`\dashboard`** : Main dashboard
 
 -   **Any other route** : Show 404 page for any other routes
 
