@@ -2,6 +2,12 @@
 
 Dashboard to manage Jobs
 
+## Development flow
+
+![development flow](./mockup/development_flow.png)
+
+<!-- ![mockup 1](./mockup/development_flow.png) -->
+
 ## Project Structure
 
 ```
