@@ -123,3 +123,11 @@ Swagger UI
           required: true
           description: the job id
 ```
+
+.env values
+
+```yaml
+MONGO_URI: MongoDB database connection link
+JWT_SECRET: JWT Secret Value
+JWT_LIFETIME: Lifetime of JWT token sended to client (eg 30d, 12d ...etc)
+```
